@@ -1,0 +1,91 @@
+\begin{inhalt}
+\renewcommand*\chapterpagestyle{scrheadings}
+\chapter{Backend}
+
+Einführung in Tobias Teil Kurze Erklärung
+
+\section{Komponentenwahl}
+
+\subsection{Sensoren}
+Im ersten Schritt werden grundlegende Datenbankeinstellungen vorgenommen, die als „Sensoren“ fungieren und die Umgebung überwachen. Beispiele hierfür sind Befehle, die Zeitüberschreitungen verhindern und die richtige Zeichencodierung sicherstellen:
+\begin{lstlisting}[language=SQL, caption=Grundlegende Datenbankeinstellungen]
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+\end{lstlisting}
+Diese Einstellungen legen den Grundstein für einen stabilen Betrieb der Datenbank.
+
+\subsection{Mikrocontroller}
+Die „Mikrocontroller“ im Backend entsprechen den installierten Erweiterungen, die verschiedene Funktionen steuern und die Performance der Datenbank verbessern. Beispiele hierfür sind:
+\begin{lstlisting}[language=SQL, caption=Installation von Erweiterungen]
+CREATE EXTENSION IF NOT EXISTS "pgsodium" WITH SCHEMA "pgsodium";
+CREATE EXTENSION IF NOT EXISTS "pg_graphql" WITH SCHEMA "graphql";
+CREATE EXTENSION IF NOT EXISTS "pg_stat_statements" WITH SCHEMA "extensions";
+CREATE EXTENSION IF NOT EXISTS "pgcrypto" WITH SCHEMA "extensions";
+CREATE EXTENSION IF NOT EXISTS "pgjwt" WITH SCHEMA "extensions";
+CREATE EXTENSION IF NOT EXISTS "supabase_vault" WITH SCHEMA "vault";
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA "extensions";
+\end{lstlisting}
+Diese Erweiterungen erweitern die Funktionalität, etwa in der Kryptographie oder bei der Implementierung von GraphQL-Schnittstellen.
+
+\subsection{Bedienelemente}
+Zu den „Bedienelementen“ zählt die Erstellung der Datenstrukturen, also Tabellen und zugehörige Constraints, die das Rückgrat der Datenbank bilden. Beispielsweise wird die Tabelle \texttt{classes} folgendermaßen erstellt:
+\begin{lstlisting}[language=SQL, caption=Erstellung der Tabelle "classes"]
+CREATE TABLE IF NOT EXISTS "public"."classes" (
+    "id" uuid DEFAULT gen_random_uuid() NOT NULL,
+    "created_at" timestamp with time zone DEFAULT now() NOT NULL,
+    "name" text,
+    "department_id" uuid DEFAULT gen_random_uuid()
+);
+\end{lstlisting}
+Zusätzlich werden eindeutige Schlüssel (Primary Keys) und Fremdschlüsselbeziehungen definiert, um die Datenintegrität zu gewährleisten.
+
+\section{Versorgungen \& Ansteuerungen}
+
+\subsection{Bussysteme}
+Die „Bussysteme“ im Backend spiegeln die Kommunikationswege zwischen den einzelnen Tabellen wider – insbesondere die Beziehungen, die über Fremdschlüssel hergestellt werden. Ein Beispiel:
+\begin{lstlisting}[language=SQL, caption=Definition eines Fremdschlüssels]
+ALTER TABLE ONLY "public"."classes"
+    ADD CONSTRAINT "classes_department_id_fkey" FOREIGN KEY ("department_id")
+    REFERENCES "public"."departments"("id") ON UPDATE CASCADE ON DELETE CASCADE;
+\end{lstlisting}
+Dieser Befehl sorgt dafür, dass Änderungen in den referenzierten Tabellen automatisch übernommen werden.
+
+\subsection{Spannungsversorgungen}
+Die „Spannungsversorgungen“ symbolisieren die Sicherheits- und Automatisierungselemente des Backends, beispielsweise Triggerfunktionen und die Vergabe von Zugriffsrechten. Ein Beispiel für eine Triggerfunktion, die beim Anlegen eines neuen Benutzers automatisch ein Profil erstellt, lautet:
+\begin{lstlisting}[language=SQL, caption=Triggerfunktion handle_new_user()]
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+ RETURNS trigger
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO ''
+AS $function$
+begin
+  insert into public.profiles (id)
+  values (new.id);
+  return new;
+end;
+$function$
+;
+\end{lstlisting}
+Zusätzlich werden mittels GRANT-Befehlen Zugriffsrechte für unterschiedliche Rollen definiert, um einen kontrollierten Zugriff auf die Daten zu gewährleisten.
+
+\section{Pin-Layout \& Schematik}
+Das „Pin-Layout \& Schematik“ entspricht der Gesamtstruktur der Datenbank. Hier wird das Layout der Tabellen, deren Beziehungen sowie Sicherheitsmechanismen wie Row Level Security dargestellt:
+\begin{lstlisting}[language=SQL, caption=Aktivierung von Row Level Security]
+ALTER TABLE "public"."classes" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."departments" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."schools" ENABLE ROW LEVEL SECURITY;
+\end{lstlisting}
+Diese Maßnahmen stellen sicher, dass nur autorisierte Benutzer auf bestimmte Daten zugreifen können.
+
+\section{PCB-Design}
+Im „PCB-Design“ wird das finale Zusammenspiel aller Komponenten des Backends zusammengefasst. Dies umfasst abschließend die Konfiguration der Tabellen, Triggerfunktionen und Zugriffsrechte, welche zusammen ein robustes und sicheres System bilden:
+\begin{lstlisting}[language=SQL, caption=Vergabe von Zugriffsrechten]
+grant select on table "public"."profiles" to "anon";
+grant insert on table "public"."profiles" to "authenticated";
+grant update on table "public"."profiles" to "service_role";
+\end{lstlisting}
+Das Endresultat ist ein Backend, das durch präzise Konfiguration und sorgfältige Planung den Anforderungen moderner Anwendungen gerecht wird.
+
+\end{inhalt}
