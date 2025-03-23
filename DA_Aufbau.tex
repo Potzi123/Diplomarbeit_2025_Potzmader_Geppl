@@ -58,12 +58,126 @@
 %% Subfigures
 \usepackage[lofdepth]{subfig}
 
+%% Set the counter for the 2.1.1 latex how to get 2.1.1.1
+\setcounter{secnumdepth}{4}
+
 %% Für Quellenangaben unter Bildern
 \newcommand*{\quelle}[1]{\par\raggedleft\footnotesize Quelle:~#1}
+
+% add the rotating package
+\usepackage{rotating}
 
 %% Listings (Code)
 \usepackage{listings}
 \usepackage{color}
+
+
+%% TypeScript
+
+\usepackage[utf8]{inputenc}
+\usepackage{xcolor}
+\usepackage{listings}
+
+% ---------------------------
+% TSX Language and Style Setup
+% ---------------------------
+\lstdefinelanguage{TSX}{
+  sensitive=true,
+  keywords={
+    import, from, class, extends, function, return, if, else, for, while,
+    const, let, var, type, interface, implements, private, public, protected,
+    static, any, never, boolean, string, number, unknown, readonly, this, new,
+    React, JSX
+  },
+  morecomment=[l]{//},         % single-line comments
+  morecomment=[s]{/*}{*/},     % multi-line comments
+  morestring=[b]",             % "strings"
+  morestring=[b]',             % 'strings'
+  alsoletter={:,<,>,/},        % treat these characters as part of words
+  % Color angle brackets (and closing tags) in a different color
+  moredelim=[s][\color{blue}]{<}{>},
+  moredelim=[s][\color{blue}]{</}{>},
+}
+
+\lstdefinestyle{mytsx}{
+  language=TSX,
+  backgroundcolor=\color{white},      % White background
+  basicstyle=\ttfamily\small,         % Monospaced, small font
+  keywordstyle=\color{blue}\bfseries,
+  stringstyle=\color{orange},
+  commentstyle=\color{gray}\itshape,
+  frame=single,                       % Frame around the code
+  numbers=left,                       % Line numbers on the left
+  breaklines=true,
+  columns=fullflexible
+}
+
+% ---------------------------
+% JSON Language and Style Setup
+% ---------------------------
+\lstdefinelanguage{json}{
+  basicstyle=\ttfamily\small,
+  numbers=none,
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{white},
+  % Color numbers and punctuation using literate programming:
+  literate=
+    {0}{{{\color{orange}0}}}{1}
+    {1}{{{\color{orange}1}}}{1}
+    {2}{{{\color{orange}2}}}{1}
+    {3}{{{\color{orange}3}}}{1}
+    {4}{{{\color{orange}4}}}{1}
+    {5}{{{\color{orange}5}}}{1}
+    {6}{{{\color{orange}6}}}{1}
+    {7}{{{\color{orange}7}}}{1}
+    {8}{{{\color{orange}8}}}{1}
+    {9}{{{\color{orange}9}}}{1}
+    {:}{{{\color{blue}{:}}}}{1}
+    {,}{{{\color{blue}{,}}}}{1}
+    {\{}{{{\color{red}{\{}}}}{1}
+    {\}}{{{\color{red}{\}}}}}{1}
+    {[}{{{\color{red}{[}}}}{1}
+    {]}{{{\color{red}{]}}}}{1}
+}
+
+\lstdefinestyle{myjson}{
+  language=json,
+  backgroundcolor=\color{white},
+  basicstyle=\ttfamily\small,
+  frame=single,
+  numbers=left,         % Optional: add line numbers if you want
+  breaklines=true,
+  columns=fullflexible
+}
+
+
+
+
+\lstdefinestyle{mysql}{
+  language=SQL,                      % SQL als Sprache auswählen
+  backgroundcolor=\color{white},     % Weißer Hintergrund
+  basicstyle=\ttfamily\small,        % Monospace-Schrift in kleiner Größe
+  keywordstyle=\color{blue}\bfseries, % Schlüsselwörter in Blau und fett
+  stringstyle=\color{orange},         % Zeichenketten in Orange
+  commentstyle=\color{gray}\itshape,  % Kommentare in Grau und kursiv
+  frame=single,                      % Rahmen um den Code
+  numbers=left,                      % Zeilennummern links
+  breaklines=true,                   % Zeilenumbrüche aktivieren
+  columns=fullflexible
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
@@ -189,13 +303,15 @@
 \responsible{Thomas Potzmader, Tobias Geppl} 
 \include{files/Beginn/1_einleitung}                                     %Einführung(LaTeX File) einfügen
 
-%Chapter 2 - Grundlagen (& Methoden)
+%Chapter 2 - (Grundlagen & Methoden)
 \responsible{Thomas Potzmader, Tobias Geppl} 
-\include{files/Beginn/2_grundlagen}                                      %Grundlagen(LaTeX File) einfügen
+\include{files/Thomas/Beginn/grundlagen}   
+\include{files/Tobias/Beginn/grundlagen}  %Grundlagen(LaTeX File) einfügen
 
-%Chapter 3 - (Methoden)
+%Chapter 3 - (Design & Konzept)
 \responsible{Thomas Potzmader, Tobias Geppl} 
-\include{files/Beginn/3_methoden}                                      %Methoden(LaTeX File) einfügen
+\include{files/Thomas/Beginn/design-konzept}   
+\include{files/Tobias/Beginn/design-konzept}  %Methoden(LaTeX File) einfügen
 
 %Chapter 4 Ergebnisse
 \responsible{Thomas Potzmader, Tobias Geppl} 
@@ -211,17 +327,17 @@
 \include{files/Tobias/uC-Programmierung}                                      
 
 
-%Chapter 7 Frontend
+%Chapter 7 Website
 \responsible{Thomas Potzmader} 
-\include{files/Thomas/Database}     
+\include{files/Thomas/Website}     
 
-%Chapter 8 Backend
+%Chapter 8 Datenbank
 \responsible{Thomas Potzmader} 
-\include{files/Thomas/Backend}                                      
+\include{files/Thomas/Datenbank}
 
-%Chapter 9 Frontend
+%Chapter 9 Gehäuse
 \responsible{Thomas Potzmader} 
-\include{files/Thomas/Frontend}      
+\include{files/Thomas/Gehaeuse}   
 
 
 %%ANHANG

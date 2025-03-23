@@ -1,0 +1,149 @@
+\begin{inhalt}
+\chapter{Design \& Konzept}
+\renewcommand*\chapterpagestyle{scrheadings}
+\section{Software}
+
+\subsection{Frontend}
+Der Großteil des Frontends wird zunächst in Obsidian mithilfe des Excalidraw-Plugins entworfen, um zu veranschaulichen, wie eine Seite aussehen könnte.
+
+\subsubsection{Dashboard}
+
+Im Rahmen dieser Diplomarbeit wurde das Dashboard unter Berücksichtigung moderner Designansätze entwickelt. Es orientiert sich an dem Beispiel auf der Shadcn-Website (\url{https://ui.shadcn.com/examples/dashboard}), wobei die Gestaltung den spezifischen Anforderungen unseres Projekts angepasst wurde.
+
+\begin{figure}[!htb] 
+\centering 
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Dashboard.excalidraw.png} 
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{Shadcn Example Dashboard} 
+\label{fig:gehaeuse_internet_bild} 
+\end{figure}
+
+\subsubsection{Administrationsseiten}
+\label{ref:Administrationsseiten}
+
+Für die Entwicklung der Administrationsseiten wurde ein Konzept erarbeitet, das eine strukturierte und benutzerfreundliche Verwaltung der unterschiedlichen Datensätze ermöglicht. Auf der rechten Seite wird eine Tabelle angezeigt, in der alle relevanten Einträge übersichtlich dargestellt werden. Auf der linken Seite befindet sich eine Komponente zur Erstellung neuer Datensätze, welche die jeweiligen Tabellen ergänzt. Das System umfasst dabei separate Tabellen für Schulen, Abteilungen, Klassen, Sensoren und Benutzer, um eine differenzierte und effiziente Datenverwaltung zu gewährleisten. Zusätzlich erfolgt auf der Schul-Administrationsseite eine Visualisierung der Schulstandorte mittels einer Kartenansicht, um die räumliche Verteilung der Schulen anschaulich darzustellen.
+
+\begin{figure}[!htb] 
+\centering 
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Admin-Table.excalidraw.png} 
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{Beispiel einer Admin-Tabelle} 
+\label{fig:gehaeuse_internet_bild} 
+\end{figure}
+
+\subsubsection{Seitenleiste}
+
+\subsubsection{Seitenleiste}
+
+Die Seitenleiste wurde aufgrund ihrer optimalen Form ausgewählt, um den Benutzeraccount übersichtlich darzustellen. Zudem ermöglicht sie es Administratoren, den aktuell ausgewählten Schulstandort zu wechseln, wodurch eine bessere Übersicht über die laufenden Prozesse erzielt wird. Unterhalb dieses Bereichs werden sämtliche Abteilungen mitsamt den zugehörigen Klassen und Sensoren angezeigt. Die Sichtbarkeit einzelner Abteilungen richtet sich nach der jeweiligen Benutzerrolle: Während Administratoren sowie Schulleiter (Direktoren) alle Abteilungen mit den entsprechenden Klassen und Geräten einsehen können, erhalten Lehrkräfte ausschließlich Zugriff auf die Abteilung, in der sie tätig sind, und Schülerinnen sowie Schüler sehen lediglich ihre eigene Klasse. 
+
+Wird ein Sensor ausgewählt, gelangt der Benutzer auf das zugehörige Dashboard, welches detaillierte Informationen zu dem jeweiligen Sensor, der Klasse oder der Abteilung bereitstellt. Im unteren Bereich der Seitenleiste befindet sich zudem das Profilbild, ergänzt durch den Benutzernamen und die E-Mail-Adresse. Beim Anklicken dieses Elements öffnet sich eine Auswahlliste mit weiteren Optionen. Diese umfasst zum einen die Möglichkeit, über eine dedizierte Account-Seite den Account zu verwalten – beispielsweise den Namen, das Profilbild und den Benutzernamen zu ändern – zum anderen den Zugriff auf die in Abschnitt \ref{ref:Administrationsseiten} erläuterten Administrationsseiten sowie eine Einstellungsseite. Auf dieser können unter anderem persönliche Schlüssel für das zugeordnete Gerät sowie weitere Funktionen eingesehen werden. Abschließend steht ein Logout-Button zur Verfügung, der den Benutzer aus dem System abmeldet und zur Login-Seite zurückführt.
+
+\begin{figure}[!htb] 
+\centering 
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Sidebar.excalidraw.png} 
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{Beispiel der Seitenleiste} 
+\label{fig:gehaeuse_internet_bild} 
+\end{figure}
+
+\subsection{Backend}
+
+Im Folgenden wird das Design des Backends erläutert. Das System ist in der Lage, verschiedene Messwerte zu verarbeiten, darunter CO\textsubscript{2}-Konzentrationen, Feuchtigkeitswerte, Temperaturwerte, Gaswiderstandswerte sowie einen Zeitstempel. Diese Daten werden im JSON-Format vom Backend empfangen. Zur Sicherstellung einer einheitlichen Datenstruktur wurde das folgende JSON-Schema definiert:
+
+\begin{lstlisting}[style=myjson]
+{
+    "measured_at": "2024-10-23T12:29:02.379+00:00",
+    "co2": 6,
+    "hum": 7,
+    "temp": 8,
+    "gasres": 9
+}
+\end{lstlisting}
+
+Zur eindeutigen Identifizierung der einzelnen Sensoren wird beim Anlegen eines Sensors auf der Administrationsseite stets eine Sensor-ID generiert. Diese dient als einzigartiger Identifikator, der es ermöglicht, die Messdaten den entsprechenden Sensoren zuzuordnen. Dementsprechend wird die Sensor-ID in den JSON-Daten mitübertragen:
+
+\begin{lstlisting}[style=myjson]
+{
+    "token": "d192f90b-a5b8-4767-b5af-59ec40fe03c2",
+    "measured_at": "2024-10-23T12:29:02.379+00:00",
+    "co2": 6,
+    "hum": 7,
+    "temp": 8,
+    "gasres": 9
+}
+\end{lstlisting}
+
+Ein Problem tritt auf, wenn mehrere Messdaten gleichzeitig versendet werden sollen, da mehr Messpunkte erfasst werden, als in einer einzelnen Übertragung enthalten sein können. Zur Lösung dieses Problems wurde ein erweitertes JSON-Format entwickelt, das die Übermittlung mehrerer Messdatensätze in einer einzigen Nachricht ermöglicht:
+
+\begin{lstlisting}[style=myjson]
+{
+    "token": "d192f90b-a5b8-4767-b5af-59ec40fe03c2",
+    "data": [
+        {
+            "measured_at": "2024-10-23T12:28:02.379+00:00",
+            "co2": 3,
+            "hum": 4,
+            "temp": 5,
+            "gasres": 6
+        },
+        {
+            "measured_at": "2024-10-23T12:29:02.379+00:00",
+            "co2": 6,
+            "hum": 7,
+            "temp": 8,
+            "gasres": 9
+        },
+        {
+            "measured_at": "2024-10-23T12:30:02.379+00:00",
+            "co2": 9,
+            "hum": 10,
+            "temp": 11,
+            "gasres": 12
+        }
+    ]
+}
+\end{lstlisting}
+
+Mit diesem erweiterten Datenformat ist das Backend in der Lage, die empfangenen Messdaten effizient in der Datenbank zu speichern.
+
+\section{Datenbank}
+
+Bei der Planung der Datenbankstruktur wurde zunächst festgestellt, dass Supabase zwar über die integrierte Authentifizierungstabelle theoretisch benutzerspezifische Daten abspeichern könnte, dies jedoch nicht vorgesehen ist. Aus diesem Grund wurde entschieden, eine eigene Tabelle für Benutzer anzulegen.
+
+Im nächsten Schritt musste eine sinnvolle Struktur für die Verwaltung der Sensoren entworfen werden. Da das System nicht ausschließlich für die HTL St. Pölten vorgesehen ist, sondern auch von anderen Bildungseinrichtungen genutzt werden könnte, wurde die Datenbank entsprechend erweitert. Es wurde eine Tabelle \textit{Schools} erstellt, um mehrere Schulen abbilden zu können.
+
+Da eine Schule in verschiedene Abteilungen untergliedert ist, wurden zusätzlich die Tabellen \textit{Departments} (Abteilungen) sowie \textit{Classes} (Klassen) angelegt. Diese Struktur ermöglicht eine klare Zuordnung und Verwaltung der Sensoren auf Klassen- bzw. Abteilungsebene innerhalb der jeweiligen Schule.
+
+Für die eigentlichen Sensordaten wurden zwei weitere Tabellen erstellt: \textit{Sensors} und \textit{Sensor-Readings}. Die Trennung dieser Informationen ist notwendig, da bei einer Speicherung der Messwerte direkt in der \textit{Sensors}-Tabelle lediglich die aktuellen Werte abrufbar wären. Da jedoch geplant ist, die historischen Messwerte in Form von Zeitdiagrammen darzustellen, müssen diese dauerhaft gespeichert werden. Aus diesem Grund enthält die Tabelle \textit{Sensor-Readings} zeitlich zuordenbare Einzelmessungen, welche sich eindeutig einem Sensor zuordnen lassen.
+
+
+\newpage
+
+
+\begin{sidewaysfigure}[!htb]
+  \centering
+  \includegraphics[scale=0.45]{files/Thomas/pics/output.png}
+  \caption[Bildbezeichnung für Abbildungsverzeichnis]{Your caption text here.}
+  \label{fig:gehaeuse_internet_bild}
+\end{sidewaysfigure}
+
+\clearpage  % <-- Forces LaTeX to place the figure here
+
+
+\newpage
+
+\section{Gehäuse}
+
+Im Zuge der Gehäuseentwicklung wurde eine umfassende Internetrecherche durchgeführt. Dabei stießen wir auf eine Abbildung (vgl. Abb. \ref{fig:gehaeuse_internet_bild}), die als Inspiration für die weitere Gestaltung diente. Basierend auf diesem Vorbild wurde ein eigenes Gehäusemodell entworfen und optimal an die Anforderungen unseres Geräts angepasst.
+
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.75\textwidth]{files/Thomas/pics/new/Temu-removebg-preview.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\label{fig:gehaeuse_internet_bild}
+\end{figure}
+
+Da man aber irgendwie das gane nicht ganz drucken kann und die pcb auch reingegeben werden muss wurde sich auf ein Zweiteiliges Gehäuse entschieden das Durch dieses Youtube Video(https://www.youtube.com/watch?v=E0NVC8xhf3I&t) wurde dann die Idee entnommen das man doch mit Clips Arbeiten konnte 
+
+
+
+\end{inhalt}
