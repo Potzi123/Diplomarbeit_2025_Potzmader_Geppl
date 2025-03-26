@@ -2,6 +2,119 @@
 \renewcommand*\chapterpagestyle{scrheadings}
 \chapter{Website}
 
+
+\section{Signup}
+
+Für Das Zuordnen der jeweiligen Benutzer ist es Notwendig das die User Sich einloggen können. Dafür muss ein Anmelde Komponente erstellt werden.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/Signup/sign-up.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\label{fig:gehaeuse_internet_bild}
+\end{figure}
+
+Zur Validierung der Eingaben in den Feldern für \texttt{E-Mail} und \texttt{Passwort} wird die Bibliothek \textbf{Zod} verwendet. Dabei überprüft \textbf{Zod}, ob das E-Mail-Feld eine syntaktisch gültige E-Mail-Adresse enthält und ob das Passwortfeld einen String mit einer Mindestlänge von sechs Zeichen beinhaltet.
+
+
+\begin{lstlisting}[style=mytsx]
+const formSchema = z.object({
+  email: z.string().email({
+    message: "Please enter a valid email.",
+  }),
+  password: z.string().min(6, {
+    message: "Password must be at least 6 characters.",
+  }),
+})
+\end{lstlisting}
+\index{Code Snippet 1@\hyperref[code:snippet1]{Snippet 1}}
+
+Für den Registrierungsvorgang wurde eine Funktion implementiert, die die eingegebene E-Mail-Adresse sowie das Passwort entgegennimmt und diese über eine Funktion des Supabase-Auth-Services im System registriert.
+
+
+\begin{lstlisting}[style=mytsx]
+export async function insert_user(email: string, password: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signUp({
+    email,
+    password,
+  });
+  return error;
+}
+\end{lstlisting}
+
+Nachdem der Nutzer erfolgreich registriert wurde, erfolgt eine Weiterleitung auf die Seite \texttt{/checkyouremails}, um ihn darüber zu informieren, dass er seine E-Mails überprüfen soll.
+
+\begin{lstlisting}[style=mytsx]
+      router.push("checkyouremails");
+\end{lstlisting}
+
+\subsection{Check Your Emails}
+
+Auf dieser Seite checkt die Seite ob im Table profiles \ref{}
+
+
+\section{Login}
+Für Das Zuordnen der jeweiligen Benutzer ist es Notwendig das die User Sich einlogen können
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/Login/login-screen.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\label{fig:gehaeuse_internet_bild}
+\end{figure}
+
+Dafür wurde ein Login Komponente erstellt.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/Login/login.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\label{fig:gehaeuse_internet_bild}
+\end{figure}
+
+Für das Login Komponent wurde Zod für die überprüfung von 
+
+\begin{lstlisting}[style=mytsx]
+export async function login_user(email: string, password: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+  return error;
+}
+\end{lstlisting}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \section{Admin Dashboard}
 
 Das Admin Dashboard ist dafür da um alle User, Geräte, Klassen, Abteilungen und Schulen zu Erstellen oder zu Löschen. 

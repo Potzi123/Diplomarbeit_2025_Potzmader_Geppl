@@ -18,6 +18,8 @@
 %%Tabelen mit Farbe (cellcolor)
 \usepackage{tabulary}
 \usepackage{colortbl}
+\usepackage{colortbl}
+\usepackage{subcaption}
 \PassOptionsToPackage{dvipsnames,svgnames,table}{xcolor}
 %% Tabellen (erweitert)
 \usepackage{tabularx}
@@ -67,9 +69,20 @@
 % add the rotating package
 \usepackage{rotating}
 
+%
+
+\usepackage{subcaption}
+
+
+
+% ???
+\usepackage{wrapfig}
+
 %% Listings (Code)
 \usepackage{listings}
 \usepackage{color}
+
+
 
 
 %% TypeScript
@@ -348,13 +361,17 @@
 %%Literaturverzeichnis
 %=============================%%
 %
-\include{files/literatur}                                       %Literaturverzeichnis(LaTeX File) einfügen
+\include{files/Anhang/literatur}                                       %Literaturverzeichnis(LaTeX File) einfügen
 
 
 %% Abbildungsverzeichnis %===============================%%    + Evnt Tabellenverzeichnis + Abkürzungen
 \setcounter{lofdepth}{2}
 
 \dipalistoffigures
+
+%% Codeverzeichnis
+
+\include{files/Anhang/codeverzeichnis}  
 
 
 %%Zeitnachweise

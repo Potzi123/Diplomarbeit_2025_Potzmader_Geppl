@@ -6,6 +6,7 @@
 
 In diesem Abschnitt werden die Struktur, verwendete Tabellen sowie die wichtigen SQL-Befehle, Trigger und Funktionen der Datenbank detailliert erläutert.
 
+
 \subsection{Tabellen}
 
 Die Datenbank besteht aus den folgenden Tabellen:
@@ -48,14 +49,12 @@ CREATE TABLE classes (
 \end{lstlisting}
 
 \subsubsection{Geräte (Sensors)}
-Die Tabelle enthält Informationen zu den einzelnen Sensor-Geräten, welche jeweils einer Klasse und einem Benutzer zugeordnet sind.
+Die Tabelle enthält Informationen zu den einzelnen Sensor-Geräten, welche jeweils einer Klasse  ist.
 
 \begin{lstlisting}[style=mysql]
 CREATE TABLE sensors (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT,
-    class_id UUID REFERENCES classes(id),
-    user_id UUID REFERENCES profiles(id),
     created_at TIMESTAMPTZ DEFAULT now()
 );
 \end{lstlisting}
