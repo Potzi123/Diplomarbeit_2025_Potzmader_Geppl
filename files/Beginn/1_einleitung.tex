@@ -2,10 +2,28 @@
 \renewcommand*\chapterpagestyle{scrheadings}
 \chapter{Einleitung}
 
-Individuelle Zielsetzung und Aufgabenstellung
+Diese Diplomarbeit ist ein Ableger eines Erasmus+-Projekts, das zum Ziel hat, die Luftqualität im Außenbereich (beim Fahrradfahren) sowie in Innenräumen zu messen und die gesammelten Daten weiterzuverarbeiten. Dieser Ableger bezieht sich auf die Luftqualitätsmessung in Innenräumen, speziell in Schulen beziehungsweise Klassenräumen.
 
 \section{Ausgangslage}
+
+In Schulklassen ist die Luftqualität meist sehr schlecht aufgrund eines zu hohen CO₂-Gehalts sowie anderer Schadstoffe in der Luft. Viele Menschen realisieren dies nicht, und es führt zu Kopfschmerzen, Konzentrationsmangel und weiteren negativen Aspekten.
+
 \section{Zielsetzung}
+
+Ziel dieser Diplomarbeit ist es, ein Messgerät zu entwickeln, das die Luftqualität in Klassenräumen erfasst und die Ergebnisse anschließend digital über eine Webapplikation veranschaulicht. Die Webapplikation soll die gemessenen Daten graphisch wiedergeben und verschiedene Messgeräte beinhalten können. Das Messen der Daten soll über verschiedene Sensoren erfolgen, welche von einem Mikrocontroller ausgelesen werden, der die Messdaten über eine WLAN-Verbindung an einen Server weiterleitet. Eine Platine soll dafür entwickelt werden, die in ein 3D-gedrucktes Gehäuse integriert werden kann.
+
+\section{Individuelle Themenstellung:}
+
+\textbf{Tobias Geppl:}
+Die Schaltung sowie der benötigte Print für das Messgerät werden entworfen. Die Bauteile werden bestellt und der Print wird selbst bestückt. Der Mikrocontroller wird mit dem Programm Visual Studio Code in den Programmiersprachen C/C++ programmiert. Es sollen Parameter in der Luft gemessen werden, wie z. B. Temperatur, Feinstaub und CO₂. Der Mikrocontroller liest die Daten von den Sensoren aus. Der Mikrocontroller verbindet sich mit dem WLAN, um die Daten an einen Server zu senden, wo diese gespeichert und weiterverarbeitet werden. Die Stromversorgung des Geräts erfolgt über einen USB-C-Stecker.
+
+\bigskip \\
+
+\textbf{Thomas Potzmader:}
+Eine App für iOS und Android zur Anzeige von Luftqualitätswerten wird entwickelt. Die App soll mit einer plattformübergreifenden Entwicklungsumgebung umgesetzt werden. Für das Backend dient eine Datenbank. Zusätzlich wird ein 3D-gedrucktes Gehäuse in Fusion 360 entworfen, um die Hardware zu integrieren und zu schützen.
+
+
+
 
 
 \end{inhalt}

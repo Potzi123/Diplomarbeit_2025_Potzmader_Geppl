@@ -1,0 +1,65 @@
+\begin{inhalt}
+\clearpage
+\thispagestyle{empty} % nur für die erste Seite
+\begin{center}
+
+\dataSchool{HTBLuVA St. Pölten}
+\dataDepartment{Höhere Lehranstalt für Elektronik und Technische Informatik}
+\dataSubdepartment{Ausbildungsschwerpunkte Embedded- \& Wireless Systems}
+\dataSession{2024/25}
+
+
+\begin{center}
+    \vspace*{-15mm}
+    \begin{minipage}[t]{\textwidth}
+        \begin{minipage}[c]{0.1\textwidth}
+            \hspace*{-5mm}
+            \includegraphics[width=1.5\linewidth]{doc/img/htl.png}
+        \end{minipage}%
+        \begin{minipage}[c]{0.8\textwidth}
+            \centering
+            {\bfseries\sffamily\large HTBLuVA St. Pölten}\\
+            \vspace{1.5mm}
+            {\bfseries\sffamily\small Höhere Lehranstalt für Elektronik und Technische Informatik}\\
+            \vspace{1.5mm}
+            {\sffamily\scriptsize Ausbildungsschwerpunkte Embedded- \& Wireless Systems}\\
+            \vspace{1.5mm}
+        \end{minipage}%
+        \begin{minipage}[c]{0.1\textwidth}
+            \hspace*{-2mm}
+            \includegraphics[width=1.5\linewidth]{doc/img/htl-bbs.png}
+        \end{minipage}
+    \end{minipage}
+    \rule{\textwidth}{0.2pt}
+    \vspace{0.5cm}
+
+    {\LARGE \textbf{DIPLOMARBEIT}}\\
+    {\large \textbf{DOKUMENTATION}}
+\end{center}
+
+\vspace{1cm}
+
+\begin{tabular}{|p{5cm}|p{10cm}|}
+    \hline
+    \textbf{Namen der Verfasser/innen} & Tobias Geppel, Thomas Potzmader \\
+    \hline
+    \textbf{Jahrgang / Klasse} & \href{https://www.htlstp.ac.at}{5AHETLS} / 2024/2025 \\
+    \hline
+    \textbf{Thema der Diplomarbeit} & Sensordaten-Anzeige – Platine und Firmware für Sensordaten \\
+    \hline
+    \textbf{Kooperationspartner} & Europäische Union \\
+    \hline
+    \textbf{Aufgabenstellung} & Ziel ist die Entwicklung eines Messgeräts, das mit verschiedenen Sensoren die Luftqualität in Klassenräumen misst. Die Daten werden über eine WLAN-Verbindung von einem Mikrocontroller an einen Server übertragen. Dort werden sie gespeichert und weiterverarbeitet. Die Anzeige der Daten erfolgt über eine App. \\
+    \hline
+    \textbf{Realisierung} & Es werden Parameter wie Temperatur, Luftfeuchtigkeit und CO$_2$-Konzentration gemessen. Als Mikrocontroller wird der Raspberry Pi Pico W eingesetzt. Die Sensoren kommunizieren über I2C mit dem Mikrocontroller. Dieser verbindet sich per WLAN und sendet die Daten über HTTPS an einen Server, wo sie gespeichert und weiterverarbeitet werden.
+
+    Zusätzlich wurde eine Platine entworfen, welche den Mikrocontroller mit den Sensoren verbindet. Ein LCD-Display dient zur direkten Anzeige der Messwerte am Gerät.
+
+    Die Webanwendung wurde mit dem Framework Next.js entwickelt. Damit konnte sowohl das Frontend- als auch ein leichtgewichtiges Backend innerhalb einer gemeinsamen Codebasis realisiert werden. Die Sensordaten werden in Echtzeit und benutzerfreundlich auf der Webseite dargestellt. Für die Datenhaltung und Benutzerverwaltung kommt Supabase zum Einsatz. Supabase bietet eine Echtzeit-Datenbank und integrierte Authentifizierungsfunktionen, wodurch unterschiedliche Benutzerrollen definiert werden können. Dadurch wurde eine sichere und einfache Anmeldung sowie Abmeldung für die Nutzer realisiert. \\
+    \hline
+    \textbf{Ergebnisse} & Das Ergebnis umfasst eine vollständige Website mit Anmeldung, Datenanzeige, Administrationsseite und Seitenleiste. Zusätzlich wurde ein physisches Messgerät entwickelt, bei dem sich die Platine mit allen Komponenten in einem 3D-gedruckten Gehäuse befindet. \\
+    \hline
+\end{tabular}
+\end{center}
+\end{inhalt}
+

@@ -1,18 +1,404 @@
 \begin{inhalt}
 \renewcommand*\chapterpagestyle{scrheadings}
-\chapter{Mikrocontroller - Programmierung}
+
+\chapter{Mikrocontroller-Programmierung}
+
+Die Programmierung des Raspberry Pi Pico W erfolgte mithilfe der Entwicklungsumgebung Visual Studio Code (Kap. \ref{sec:VS-Code}) in Kombination mit der Raspberry Pi Pico-Erweiterung (Kap. \ref{sec:PicoExtension}). Als Programmiersprache wurde C/C++ verwendet. Die Projektstruktur basierte auf dem CMake-Buildsystem mit der Verwendung des offiziellen Pico SDK (\ref{…}). 
+
+\section{I2C:} \label{I2C_Programmierung}
+
+Der Raspberry Pico W besitzt zwei I2C-instanzen: i2c0 und i2c1. Bei der Initialisierungsfunktion i2c\_init(), muss die I2C-Instanz sowie die Taktgeschwindigkeit übergeben werden. Diese Funktion wird von dem Pico SDK (\ref{….}) bereitgestellt. 
+
+\begin{lstlisting} [style=mytsx]
+i2c_init(i2c0, 100 * 1000); // i2c0 mit 100 kHz Takt initialisieren
+\end{lstlisting}
+\index{Code Snippet 1@\hyperref[code:snippet1]{Snippet 1}}
+
+
+Anschließend werden die entsprechenden GPIO-Pins sowie die internen Pullup-Widerstände gesetzt, da sich keine physischen Pullup-Widerstände auf den Leitungen befinden. 
+
+\\bigskip \\
+
+
+\textbf{Schreiben:}
+
+Um Daten auf den I2C-Bus zu schreiben, wird folgende Funktion benutzt:
+
+\begin{lstlisting} [style=mytsx]
+int i2c_write_blocking(i2c_inst_t *i2c, uint8_t addr, const uint8_t *src, size_t len, bool nostop);
+\end{lstlisting}
+\index{Code Snippet 1@\hyperref[code:snippet1]{Snippet 1}}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|l|p{10cm}|}
+\hline
+\rowcolor{cyan!20}
+\textbf{Parameter} & \textbf{Bedeutung} \\
+\hline
+\texttt{i2c} & I²C-Instanz (\texttt{i2c0} oder \texttt{i2c1}) \\
+\hline
+\texttt{addr} & I²C-Adresse des Slaves \\
+\hline
+\texttt{src} & Zeiger auf das zu sendende Datenarray \\
+\hline
+\texttt{len} & Anzahl der zu sendenden Bytes \\
+\hline
+\texttt{nostop} & \texttt{false} = STOP \newline
+\texttt{true} = REPEATED START \\
+\hline
+\end{tabular}
+\caption{I2C-Sende-Funktion Parameterübersicht}
+\label{tab:i2c_parameter}
+\end{table}
+
+
+
+
+\textbf{Lesen:}
+
+Um Daten vom I2C-Bus zu lesen, wird folgende Funktion benutzt:
+
+\begin{lstlisting} [style=mytsx][caption={I2C Initialisierung}, label={code:i2c_init}]
+int i2c_read_blocking(i2c_inst_t *i2c, uint8_t addr, uint8_t *dst, size_t len, bool nostop);
+\end{lstlisting}
+\index{Code Snippet 1@\hyperref[code:snippet1]{Snippet 1}}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|l|p{10cm}|}
+\hline
+\rowcolor{cyan!20}
+\textbf{Parameter} & \textbf{Bedeutung} \\
+\hline
+\texttt{i2c} & I2C-Instanz (\texttt{i2c0} oder \texttt{i2c1}) \\
+\hline
+\texttt{addr} & I2C-Adresse des Slaves \\
+\hline
+\texttt{dst} & Zielpuffer für empfangene Bytes \\
+\hline
+\texttt{len} & Anzahl der zu lesenden Bytes \\
+\hline
+\texttt{nostop} & Meist \texttt{false}, es sei denn, ein \texttt{REPEATED START} ist erforderlich \\
+\hline
+\end{tabular}
+\caption{I2C-Lese-Funktion Parameterübersicht}
+\label{tab:i2c_read_parameters}
+\end{table}
+
+Beim Lesen muss zuerst das entsprechende Register geschrieben werden, um anschließend die Daten daraus auszulesen. 
+
+\bigskip \\
+Die Lese- und Schreibfunktionen werden vom Pico SDK bereitgestellt.
+
+\textbf{I2C-Beispiel:}
+
+Als Beispiel wurde vom Host die Daten 0xAA an den Slave mit der Adresse 0x28 gesendet. 
+
+\begin{lstlisting} [style=mytsx][caption={I2C Initialisierung}, label={code:i2c_init}]
+test_buffer[0] = 0xAA;
+i2c_write_blocking(i2c, 0x28, test_buffer, 1, false);
+\end{lstlisting}
+\index{Code Snippet 1@\hyperref[code:snippet1]{Snippet 1}}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.75\textwidth]{files/Tobias/pics/Schaltungen/Schematik/3V3_Converter_Schematik.PNG}
+\caption[3,3V Spannungsregler Schematik]{3,3V Spannungsregler Schematik}
+\label{fig:3,3V Spannungsregler Schematik}
+\end{figure}
+
+
 
 \section{PAS CO2}
+
+Da für den PAS CO2-Sensor keine Bibliotheken speziell für den Raspberry Pi Pico W verfügbar sind, wurde mithilfe des Datenblatts \cite{Raspberry_Pi_Pico_W} sowie des Programming-Guides \cite{PASCO2_ProgrammingGuide} des PAS CO2 eine eigene Bibliothek geschrieben.
+
+\bigskip \\
+
+\textbf{Sensor Struktur:}
+
+Der Sensor wird im Programmcode als folgende Struktur aufgebaut:
+
+\begin{lstlisting} [style=mytsx][caption={I2C Initialisierung}, label={code:i2c_init}]
+typedef struct {
+    uint8_t i2c_address;
+    i2c_inst_t* i2c;
+    uint8_t lsb;
+    uint8_t msb;
+    uint8_t data_rdy;
+    uint16_t result;
+} Pas_co2;
+\end{lstlisting}
+\index{Code Snippet 1@\hyperref[code:snippet1]{Snippet 1}}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|l|p{11cm}|}
+\hline
+\rowcolor{cyan!20}
+\textbf{Variable} & \textbf{Beschreibung} \\
+\hline
+\texttt{i2c\_address} & I2C-Adresse des Sensors\\
+\hline
+\texttt{i2c} & Zeiger auf die verwendete I²C-Instanz \\
+\hline
+\texttt{lsb} & Low-Byte der CO2-Messung (Least Significant Byte) \\
+\hline
+\texttt{msb} & High-Byte der CO2-Messung (Most Significant Byte) \\
+\hline
+\texttt{data\_rdy} & Statusspeicher – zeigt an, ob neue Daten vorhanden sind \\
+\hline
+\texttt{result} & Letzter berechneter CO2-Wert in ppm, zusammengesetzt aus \texttt{msb} und \texttt{lsb} \\
+\hline
+\end{tabular}
+\caption{Sensorstruktur PASCO2 - Variablenübersicht}
+\label{tab:co2_struct_vars}
+\end{table}
+
+\textbf{Initialisierung:}
+
+Der PASCO2 besitzt drei verschiedene Betriebsmodi: Idle Mode, Continuous Mode und Single-Shot Mode, die über das MEAS\_CFG-Register eingestellt werden. In diesem Fall wird der Continuous Mode gewählt. In diesem Modus wird periodisch eine CO2-Messung ausgelöst. Sobald eine Messung abgeschlossen ist, wechselt der Sensor automatisch in den Idle-Mode (Ruhemodus) und wacht selbstständig zur nächsten Messung wieder auf. Die Periode der Messungen lässt sich mit den Registern MEAS\_RATE\_H und MEAS\_RATE\_L im Bereich von 5 bis 4095 Sekunden einstellen. In diesem Fall wird ein 10 Sekunden Intervall gewählt.
+
+\begin{lstlisting} [style=mytsx][caption={I2C Initialisierung}, label={code:i2c_init}]
+
+    uint8_t buffer[2];
+
+    // Setzt die Messrate auf 1 Hz
+    buffer[0] = MEAS_RATE_H;
+    buffer[1] = 0x00;
+    i2c_write_blocking(sensor->i2c, sensor->i2c_address, buffer, 2, false);
+    
+    buffer[0] = MEAS_RATE_L;
+    buffer[1] = 0x01;
+    i2c_write_blocking(sensor->i2c, sensor->i2c_address, buffer, 2, false);
+
+    // Setzt den Sensor in den Continuous-Modus
+    buffer[0] = MEAS_CFG;
+    buffer[1] = 0x02;
+    i2c_write_blocking(sensor->i2c, sensor->i2c_address, buffer, 2, false);
+}
+\end{lstlisting}
+
+
+\textbf{CO2-Messung:}
+
+In der Funktion pas\_co2\_read(Pas\_co2* sensor) wird die CO2-Konzentration ausgelesen. Dazu wird zunächst das MEAS\_STS-Register abgefragt, um zu prüfen, ob neue Daten vorhanden sind. Ist dies der Fall, wird die CO2-Konzentration aus zwei Registern, CO2PPM\_H und CO2PPM\_L, ausgelesen. Anschließend werden die beiden Register miteinander kombiniert und das Ergebnis gespeichert.
+
+\begin{lstlisting} [style=mytsx][caption={I2C Initialisierung}, label={code:i2c_init}]
+        // CO2 PPM High-Byte lesen
+        reg = CO2PPM_H;
+        i2c_write_blocking(sensor->i2c, sensor->i2c_address, &reg, 1, true);
+        i2c_read_blocking(sensor->i2c, sensor->i2c_address, &sensor->msb, 1, false);
+
+        // CO2 PPM Low-Byte lesen
+        reg = CO2PPM_L;
+        i2c_write_blocking(sensor->i2c, sensor->i2c_address, &reg, 1, true);
+        i2c_read_blocking(sensor->i2c, sensor->i2c_address, &sensor->lsb, 1, false);
+
+        // High- und Low-Byte kombinieren und speichern
+        sensor->result = (sensor->msb << 8) | sensor->lsb;
+\end{lstlisting}
+
+
+\textbf{Ergebnisabruf:}
+
+Die Funktion pas\_co2\_get\_result(const Pas\_co2* sensor) greift auf das gespeicherte Ergebnis zu und gibt es zurück. 
+
+\begin{lstlisting} [style=mytsx][caption={I2C Initialisierung}, label={code:i2c_init}]
+uint16_t pas_co2_get_result(const Pas_co2* sensor) {
+    return sensor->result;
+}
+\end{lstlisting}
+
 \section{BME688}
 
-\section{HTTPS}
+Für den BME688 wurde eine Bibliothek geschrieben, die auf der BME68x-C-Bibliothek von Bosch basiert. Die eigentliche Kommunikation mit dem Sensor erfolgt über eigene Funktionen, während die Bosch-Bibliothek die Konfiguration und Datenverarbeitung übernimmt.
+
+\textbf{Sensor Struktur}
+\begin{lstlisting} [style=mytsx][caption={I2C Initialisierung}, label={code:i2c_init}]
+
+typedef struct {
+    i2c_inst_t *i2c;
+    uint8_t address;
+    struct bme68x_dev dev;
+    struct bme68x_conf conf;
+    struct bme68x_heatr_conf heatr_conf;
+} BME688;
+\end{lstlisting}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|l|p{11cm}|}
+\hline
+\rowcolor{cyan!20}
+\textbf{Feld} & \textbf{Bedeutung} \\
+\hline
+\texttt{i2c} & I²C-Instanz (\texttt{i2c0} oder \texttt{i2c1}) \\
+\hline
+\texttt{address} & I²C-Adresse des Sensors \\
+\hline
+\texttt{dev} & Kern-Datenstruktur der Bosch-Bibliothek \\
+\hline
+\texttt{conf} & Konfiguration der Sensor-Messparameter \\
+\hline
+\texttt{heatr\_conf} & Konfiguration der Heizung \\
+\hline
+\end{tabular}
+\caption{Sensorstruktur BME688 - Variablenübersicht}
+\label{tab:bme688_struct}
+\end{table}
+
+
+\bigskip \\
+\textbf{Initialisierung:}
+
+\begin{lstlisting} [style=mytsx][caption={I2C Initialisierung}, label={code:i2c_init}]
+bool bme688_init(BME688 *sensor, i2c_inst_t *i2c, uint8_t address, uint8_t sda, uint8_t scl);
+\end{lstlisting}
+
+Die Initialisierungsfunktion weist die I2C-Instanz sowie die Adresse des Sensors zu. Sie setzt ebenfalls Funktionszeiger auf die Adapterfunktionen. 
+
+\bigskip \\
+\textbf{Sensorstart:}
+
+\begin{lstlisting} [style=mytsx][caption={I2C Initialisierung}, label={code:i2c_init}]
+bool bme688_begin(BME688 *sensor);
+\end{lstlisting}
+
+Die Startfunktion initialisiert den Bosch-Treiber, setzt Oversampling und Heizkonfigurationen, sowie den Forced-Modus des Sensors. 
+
+\bigskip \\
+\textbf{Daten lesen:}
+
+\begin{lstlisting} [style=mytsx][caption={I2C Initialisierung}, label={code:i2c_init}]
+bool bme688_read_data(BME688 *sensor, float *temperature, float *humidity, float *pressure, float *gas_resistance);
+\end{lstlisting}
+
+Diese Funktion startet eine Messung im Forced-Modus und wartet die notwendige Heiz,- und Messdauer des Sensors ab. Temperatur, Luftfeuchtigkeit, Druck und Gaswiderstand werden ausgelesen. 
+
+\bigskip \\
+\textbf{Adapterfunktionen:}
+
+Folgende Funktionen dienen als I2C-Adapterfunktionen zwischen der Bosch-Bibliothek und der I2C-Kommunikation mit dem Sensor:
+
+\begin{lstlisting} [style=mytsx][caption={I2C Initialisierung}, label={code:i2c_init}]
+static int8_t bme688_i2c_read(uint8_t reg, uint8_t *data, uint32_t len, void *intf);
+\end{lstlisting}
+
+\begin{lstlisting} [style=mytsx][caption={I2C Initialisierung}, label={code:i2c_init}]
+static int8_t bme688_i2c_write(uint8_t reg, const uint8_t *data, uint32_t len, void *intf);
+\end{lstlisting}
+
+\begin{lstlisting} [style=mytsx][caption={I2C Initialisierung}, label={code:i2c_init}]
+static void bme688_delay_us(uint32_t period, void *intf);
+\end{lstlisting}
+
+Diese Funktionen werden als Callback an die Bosch-Bibliothek übergeben. Sie nutzen die Funktionen i2c\_write\_blocking() und i2c\_read\_blocking() (Kap. \ref{I2C_Programmierung}) aus dem Pico SDK.
+
 
 \section{Display Ansteuerung}
 
+Für die Ansteuerung des 2-Zoll LCD-Displays von Waveshare wird die Open-Source-Grafikbibliothek LVGL (Light and Versatile Graphics Library) in Kombination mit dem bereitgestellten Demo-Programmcode von Waveshare verwendet. 
+
+Der Demo-Code übernimmt die Initialisierung des Displays, wie:
+\begin{itemize}
+    \item Konfiguration der SPI-Schnittstelle für die Display-Kommunikation
+    \item Initialisierung des LCD-Controllers (ST7789)
+    \item Setzen von Display-Parametern wie Auflösung, Farbtiefe und Ausrichtung
+\end{itemize}
+
+\bigskip \\
+
+Zusätzlich ermöglicht LVGL die einfache Erstellung grafischer Benutzeroberflächen (GUI) direkt auf dem Display. Hierzu gehören:
+\begin{itemize}
+    \item Erstellung von verschiedenen Screens
+    \item Platzierung und Steuerung von grafischen Objekten wie Buttons, Labels, Switches
+    \item Verwaltung von Benutzerinteraktionen wie Tastern
+\end{itemize}
+
+Der Demo-Code von Waveshare stellt neben der Hardware-Initialisierung auch die notwendigen Treiberfunktionen bereit, um die LVGL-Bibliothek korrekt mit dem LCD-Controller zu verbinden. Dadurch konnte die Benutzeroberfläche direkt mit den Standardfunktionen von LVGL realisiert werden.
+
+
 \section{Display Interface}
+
+Die Benutzeroberfläche des Systems wird mithilfe der LVGL-Bibliothek erstellt. LVGL bietet viele verschiedene graphische Objekte (Widgets) zur Erstellung von Benutzeroberflächen. 
+
 \subsection{Screens}
-\subsection{Widgets}
+
+Ein Screen in LVGL ist eine virtuelle Anzeigeoberfläche, die den gesamten Anzeigebereich des Displays beschreibt. Im Projekt werden mehrere Screens verwendet, um verschiedene Seiten darzustellen. Alle grafischen Objekte (Widgets) werden immer einem bestimmten Screen zugeordnet. Screens lassen sich zur Laufzeit wechseln, wodurch ein einfacher Seitenwechsel realisiert werden kann.
+
+Im Programm wird dafür das Array \texttt{scr[4]} verwendet, welches die verschiedenen Screens speichert.
+
+\begin{lstlisting}[style=mytsx][language=C, caption={Erstellen eines Screens}]
+lv_obj_t* screen = lv_obj_create(NULL);
+lv_scr_load(screen1);  // Screen aktivieren
+\end{lstlisting}
+
+Dieses Beispiel erstellt einen leeren Screen. Ein Screen ist immer die Basis, auf der weitere Widgets platziert werden.
+
+
+\subsection{Labels:}
+
+\begin{lstlisting}[style=mytsx] caption={Erstellen eines Containers mit Label}
+lv_obj_t* cont = lv_obj_create(screen);                // Container auf dem Screen erstellen
+lv_obj_set_size(cont, 120, 60);                        // Größe festlegen
+lv_obj_align(cont, LV_ALIGN_CENTER, 0, 0);             // zentrieren
+
+lv_obj_set_style_bg_color(cont, lv_palette_main(LV_PALETTE_BLUE), 0); // Hintergrundfarbe
+
+lv_obj_t* label = lv_label_create(cont);               // Label erstellen
+lv_label_set_text(label, "Temperatur: -- °C");         // Text des Labels
+lv_obj_center(label);                                 // Label innerhalb des Containers zentrieren
+\end{lstlisting}
+
+Hier wird ein Container (Feld) auf einem Screen erstellt und mit einem Label beschriftet
+
 \subsection{Buttons}
+
+In LVGL werden Buttons mit \texttt{lv\_btn\_create()} erstellt und können anschließend mit Texten (\texttt{lv\_label\_create()}) oder Symbolen versehen werden. Durch Event-Handler lassen sich Funktionen hinterlegen, die auf einen Button-Klick reagieren.
+
+\begin{lstlisting}[style=mytsx][language=C, caption={Erstellen eines Buttons mit Label}]
+lv_obj_t* btn = lv_btn_create(screen);
+lv_obj_center(btn); // Zentriert den Button
+
+lv_obj_t* label = lv_label_create(btn);
+lv_label_set_text(label, "OK");
+\end{lstlisting}
+
+Hier wird ein Button mit einem einfachen Text erstellt und mittig auf dem aktuellen Screen platziert.
+
+\section{Wifi}
+
+Für die Verbindung mit dem WLAN, wird eine Bibliothek von Benedikt Walter eingebunden. Diese ist genau auf den Raspberry Pico W zugeschnitten. 
+
+\section{HTTPS}
+
+\section{Benutzer Interaktion:}
+
+Der Benutzer kann durch die zwei Taster mit dem Display-Interface interagieren. Die Taster haben dabei folgende Funktionen:
+
+\bigskip \\
+\noindent\textbf{Taster 1}
+\begin{itemize}
+    \item Short Press: Screen-Wechsel
+    \item Long Press: Button aktivieren (auf Screen 3)
+\end{itemize}
+
+\noindent\textbf{Taster 2}
+\begin{itemize}
+    \item Short Press: Button wählen (auf Screen 3)
+\end{itemize}
+
+Der Ablauf der Tasterabfrage im Programmcode, wird durch folgendes Ablaufdiagramm beschrieben: 
+
+
+
+
 
 
 

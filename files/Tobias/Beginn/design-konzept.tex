@@ -11,19 +11,20 @@ Da in dieser Diplomarbeit darauf geachtet wurde, hauptsächlich Komponenten mit 
 
 \subsection{Sensoren}
 
-\textbf{Xensiv PAS CO2:}
+\textbf{CO$_2$-Sensor:}
 
 \smallskip
 
-Der Pasco2 ist ein CO2-Sensor der Marke Infineon. Der Sensor misst den CO2-Anteil in der Luft in PPM (Parts Per Million). Er benötigt 3,3V sowie 12V als Spannungsversorgungen und kann unter anderem mit I2C angesteuert und ausgelesen werden. \cite{PASCO2V01}
+Der PASCO2V01 ist ein CO$_2$-Sensor der Marke Infineon. Der Sensor misst den CO$_2$-Anteil in der Luft in PPM (Parts Per Million). Er benötigt 3,3V sowie 12V als Spannungsversorgungen und kann unter anderem mit I2C angesteuert und ausgelesen werden. \cite{PASCO2V01}
 
+Benutzt wird das Mini Evaluation Board für den XENSIV™ PAS CO2-Sensor \cite{PASCO2_Miniboard}, da es bereits integrierte Pins besitzt und deshalb kein feines SMD-Löten erforderlich ist. 
 \bigskip \\
 
 \textbf{BME688:}
 
 \smallskip
 
-Der BME688 ist ein Luftqualitätssensor der Marke Bosch. Er wird mittels I2C angesteuert bzw. ausgelesen. Der BME688 misst Temperatur in °C, relative Luftfeuchtigkeit in Prozent, Luftdruck in hPa und Gaswiderstand in Ohm. Der Gassensor des BME688 wurde laut Datenblatt auf folgende Gase charakterisiert:
+Der BME688 ist ein Luftqualitätssensor der Marke Bosch \cite{BME688}. Er wird mittels I2C angesteuert bzw. ausgelesen. Der BME688 misst Temperatur in °C, relative Luftfeuchtigkeit in Prozent, Luftdruck in hPa und Gaswiderstand in Ohm. Der Gassensor des BME688 wurde laut Datenblatt auf folgende Gase charakterisiert:
 
 \begin{itemize}
     \item Wasserstoffsulfid (H₂S) 
@@ -33,14 +34,17 @@ Der BME688 ist ein Luftqualitätssensor der Marke Bosch. Er wird mittels I2C ang
 \end{itemize}
 
 Der Gassensor misst keine einzelnen Gaskonzentrationen, sondern ermittelt einen Gaswiderstandswert. Mit diesem kann die Qualität der Luft eingeschätzt werden. \cite{BME688}
+\smallskip
+
+Benutzt wird der Environment 3 Click der Marke MIKROE \cite{ENVIRONMENT_3_CLICK}. Dieser basiert auf dem BME688 von Bosch und besitzt integrierte Pins sowie Auswahlmöglichkeiten für die Adresse und das Bussystem (Kap. \ref{sec:Pin_Zuordnungen}), direkt am Board.
 
 \subsection{Display}
 
-Damit die gemessenen Parameter auch direkt am Gerät abgelesen werden können, wurde ein Display miteingebunden. Da kein touchscreenfähiges Display vorgesehen war, wurde das 2 Inch-LCD-Modul von Waveshare gewählt. Dies ist ein 320 × 240 Pixel LCD-Display, welches über SPI angesteuert wird und eine Gesamtgröße von 58mm × 35mm aufweist. \cite{2Inch LCD Display Wiki}
+Damit die gemessenen Parameter auch direkt am Gerät abgelesen werden können, wurde ein Display miteingebunden. Da kein touchscreenfähiges Display vorgesehen war, wurde das 2 Zoll-LCD-Modul von Waveshare gewählt. Dies ist ein 320 × 240 Pixel LCD-Display, welches über SPI angesteuert wird und eine Gesamtgröße von 58mm × 35mm aufweist. \cite{LCDDisplayWiki}
 
-\subsection{Benutzer Interaktion}
+\subsection{Benutzer Interaktion} \label{sec:Benutzer_Interaktionen}
 
-Damit der Benutzer mit dem Gerät interagieren kann, wurden 2 Taster miteingebunden. Mithilfe dieser kann der Benutzer zwischen den unterschiedlichen Seiten des Displays wechseln und verschiedene Einstellmöglichkeiten vornehmen (Kap. \ref{sec:display interface}).
+Damit der Benutzer mit dem Gerät interagieren kann, wurden zwei Taster miteingebunden. Mithilfe dieser kann der Benutzer zwischen den unterschiedlichen Seiten des Displays wechseln und verschiedene Einstellmöglichkeiten vornehmen (Kap. \ref{sec:display interface}).
 
 \subsection{USB4125 / USB4175} \label{sec:USB4125_75}
 
@@ -56,11 +60,9 @@ Als Designidee für das Display-Layout wurden Skizzen mit Excalidraw \cite{Excal
     \textbf{Seite 1:}
 \end{center}
 
-\smallskip
-
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=0.75\textwidth]{files/Tobias/pics/Skizzen/Screen1_Sensor_Info.png}
+\includegraphics[width=0.35\textwidth]{files/Tobias/pics/Skizzen/Screen1_Sensor_Info.png}
 \caption[Display Interface Skizze (Seite 1)]{}
 \label{fig:display_skizze_seite_1}
 \end{figure}
@@ -71,11 +73,9 @@ Am oberen Rand befindet sich die Seitenbezeichnung („CO2-Sensor“) sowie die 
     \textbf{Seite 2:}
 \end{center}
 
-\smallskip
-
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=0.75\textwidth]{files/Tobias/pics/Skizzen/Screen2_Info.png}
+\includegraphics[width=0.35\textwidth]{files/Tobias/pics/Skizzen/Screen2_Info.png}
 \caption[Display Interface Skizze (Seite 2)]{}
 \label{fig:display_skizze_seite_2}
 \end{figure}
@@ -95,11 +95,9 @@ Am unteren Ende der Seite befinden sich zwei Felder mit dem aktuellen Datum und 
     \textbf{Seite 3:}
 \end{center}
 
-\smallskip
-
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=0.75\textwidth]{files/Tobias/pics/Skizzen/Screen3_Settings.png}
+\includegraphics[width=0.35\textwidth]{files/Tobias/pics/Skizzen/Screen3_Settings.png}
 \caption[Display Interface Skizze (Seite 3)]{}
 \label{fig:display_skizze_seite_3}
 \end{figure}
@@ -118,11 +116,9 @@ Zusätzliche Markierungen („???“) deuten an, dass noch weitere Einstellungso
     \textbf{Showroom:}
 \end{center}
 
-\smallskip
-
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=0.75\textwidth]{files/Tobias/pics/Skizzen/Showroom1.png}
+\includegraphics[width=0.35\textwidth]{files/Tobias/pics/Skizzen/Showroom1.png}
 \caption[Display Interface Skizze (Showroom)]{}
 \label{fig:display_skizze_showroom1}
 \end{figure}

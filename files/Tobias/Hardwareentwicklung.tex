@@ -5,48 +5,51 @@
 \chapter{Hardwareentwicklung}
 
 In diesem Kapitel geht es um die Entwicklung sowie den Aufbau der Hardware des Messgeräts. Dazu wurde eine Platine entworfen, um alle Komponenten miteinander zu verbinden und diese in ein dafür 3D-gedrucktes Gehäuse zu integrieren.
-\smallskip
 Das PCB wurde im 2-Layer-Design entworfen, da es für diese Anwendung ausreichend war.
 Auf der Ober- und Unterseite des PCBs wurden jeweils Masseflächen angelegt, die mithilfe von Via-Stitching miteinander verbunden sind, um eine gute Verbindung herzustellen.
-Die SMD-Bauteile befinden sich nur auf der Unterseite der Platine, um beidseitiges SMD-Löten zu vermeiden. Die SMD-Widerstände und die SMD-Kondensatoren sind im 1206-Format gewählt. Die Spule wurde im 3232-Format gewählt. Durch diese Größen lassen sich die erwähnten Komponenten auch per Hand mit dem Lötkolben leicht auflöten.
-\newline
-Als Leiterbahnbreite wurde 0,7mm gewählt. Der maximale Strom einer solchen Leitung entspricht …, was dem maximalen Strom des Gerätes (siehe …) leicht standhält.
-
+Die SMD-Bauteile befinden sich nur auf der Unterseite der Platine, um beidseitiges SMD-Löten zu vermeiden. Die SMD-Widerstände und die SMD-Kondensatoren sind im 1206-Format gewählt. Die Spule wurde im 3232-Format gewählt. Durch diese Größen lassen sich die SMD-Komponenten auch leicht per Hand mit dem Lötkolben auflöten.
+\bigskip \\
+Als Leiterbahnbreite wurde 0,7mm gewählt. Der maximale Strom einer solchen Leitung mit Außenlage auf dem PCB, entspricht ca. 1,85A, was dem vom Gerät maximal benötigtem Strom (Tab. \ref{tab:Stromverbrauch}) leicht standhält. Berechnet wurde dies mit der offiziellen Formel nach IPC-2221 \cite{IPC_2221}:
 \smallskip
 
-\textbf{Gegebene Werte:}
+\noindent\textbf{Gegebene Werte: }
 
-\begin{align*}
-\text{Leiterbahnbreite} &= 0{,}7\,\text{mm} = 27{,}56\,\text{mil} \\
-\text{Kupferdicke} &= 35\,\mu\text{m} = 1{,}38\,\text{mil} \\
-\text{Temperaturänderung } \Delta T &= 10\,^\circ\text{C}
-\end{align*}
+\text{Leiterbahnbreite} = 0{,}7\,\text{mm} = 27{,}56\,\text{mil}$ 
 
+ $\text{Kupferdicke} = 35\,\mu\text{m} = 1{,}38\,\text{mil}$ 
+ 
+ $\Delta T = 10\,^\circ\text{C}$
 
+\medskip
 
-\vspace{1em}
-\textbf{Querschnittsfläche:}
+\noindent\textbf{Querschnittsfläche: } 
 
-\begin{align*}
-A &= \text{Breite} \times \text{Dicke} \\
-A &= 27{,}56 \times 1{,}38 = 38{,}02\,\text{mil}^2
-\end{align*}
+$A = 27{,}56 \cdot 1{,}38 = 38{,}02\,\text{mil}^2$
 
-\vspace{1em}
-\textbf{Formel nach IPC-2221 (Außenlage):}
+\medskip
 
-\begin{align*}
-I &= 0{,}048 \cdot (\Delta T)^{0{,}44} \cdot A^{0{,}725} \\
-I &= 0{,}048 \cdot (10)^{0{,}44} \cdot (38{,}02)^{0{,}725} \\
-I &\approx 1{,}85\,\text{A}
-\end{align*}
+\noindent\textbf{Formel nach IPC-2221 (Außenlage): }
 
-\section{Pin Zuordnungen}
+I = 0{,}048 \cdot (10)^{0{,}44} \cdot (38{,}02)^{0{,}725} \approx 1{,}85\,\text{A}
 
 
-   Um ein möglichst sauberes Design zu erreichen, wurde die Pin-Zuordnung des Mikrocontrollers folgendermaßen gewählt:
+\section{Pin Zuordnungen} \label{sec:Pin_Zuordnungen}
 
-   \renewcommand{\arraystretch}{1.5}
+\textbf{Raspberry Pico W - Pinout:}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.90\textwidth]{files/Tobias/pics/Pinout/pico2w-pinout.pdf}
+\caption[Raspberry Pico W - Pinout]{Raspberry Pico W - Pinout}
+\label{fig:PicoW_Pinout}
+\end{figure}
+
+
+
+
+Um ein möglichst sauberes Design zu erreichen, wurde die Pin-Zuordnung des Mikrocontrollers folgendermaßen gewählt:
+
+\renewcommand{\arraystretch}{1}
 
 \begin{table}[H]
 \centering
@@ -54,7 +57,7 @@ I &\approx 1{,}85\,\text{A}
 \begin{tabular}{|l|c|}
 \hline
 \rowcolor{cyan!20}
-\textbf{Pico W GPIO-Pin} & \textbf{Funktion} \\
+\textbf{GPIO-Pin} & \textbf{Funktion} \\
 \hline
 GPIO0 & S1 \\
 \hline
@@ -77,11 +80,81 @@ GPIO10 & CLK \\
 GPIO11 & DIN (MOSI) \\
 \hline
 \end{tabular}
-\caption{GPIO-Zuordnung des Pico W}
+\caption{GPIO-Zuordnung des Raspberry Pico W}
 \label{tab:GPIO_Zuordnung}
 \end{table}
 
-In Tabelle \ref{tab:GPIO_Zuordnung} entsprechen S1 und S2 den beiden Tastern. 
+
+In Tabelle \ref{tab:GPIO_Zuordnung} sind GPIO0 und GPIO1 dem Auslesen der Taster S1 und S2 (Kap. \ref{sec:Benutzer_Interaktionen}) zugewiesen. GPIO4 und GPIO5 sind den I2C-Kommunikationsleitungen zugeordnet; auf diesen Pins liegt das „Default-I2C“ des Raspberry Pi Pico W (Abb. \ref{fig:PicoW_Pinout}). GPIO7 bis GPIO11 dienen zur Ansteuerung des Displays mit SPI (Abb. \ref{fig:Display_Pinout}).
+
+\bigskip \\
+
+\textbf{Display - Pinout:}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.7\textwidth]{files/Tobias/pics/Pinout/2inch-LCD-Module-4_960.jpg}
+\caption[Display - Pinout]{Display - Pinout}
+\label{fig:Display_Pinout}
+\end{figure}
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\rowcolor{cyan!20}
+\textbf{Pin} & \textbf{Funktion} \\
+\hline
+VCC & Versorgung (3{,}3V / 5V) \\
+\hline
+GND & Ground \\
+\hline
+DIN & SPI-Dateninput \\
+\hline
+CLK & SPI-Taktinput \\
+\hline
+CS & Chip-Select, Low-Active \\
+\hline
+DC & Daten-/Befehlauswahl (High = Daten, Low = Befehl) \\
+\hline
+RST & Reset, Low-Active \\
+\hline
+BL & Hintergrundbeleuchtung \\
+\hline
+\end{tabular}
+\caption{Pinbelegung des Displays}
+\label{tab:display_pins}
+\end{table}
+
+\bigskip \\
+
+\textbf{PASCO2 - Pinout:}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.6\textwidth]{files/Tobias/pics/Pinout/minieval_co2_pinout.pdf}
+\caption[Display - Pinout]{Display - Pinout}
+\label{fig:PASCO2_Pinout}
+\end{figure}
+
+Mithilfe des PSEL-Pins wird dem Sensor mitgeteilt, welche Kommunikationsschnittstelle verwendet wird. In diesem Fall wird PSEL für I2C auf GND gezogen.
+
+\bigskip \\
+
+\textbf{BME688 - Pinout:}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.5\textwidth]{files/Tobias/pics/Pinout/environment-3-click-thickbox_default-2.jpg}
+\caption[Display - Pinout]{Display - Pinout}
+\label{fig:BME688_Pinout}
+\end{figure}
+
+Wie in Abbildung \ref{fig:BME688_Pinout} zu sehen ist, befinden sich verschiedene Auswahlmöglichkeiten auf dem ...Board, die mithilfe von Lötbrücken genutzt werden können. Die Kommunikationsschnittstelle kann zwischen SPI und I2C gewählt werden (in diesem Fall I2C), ebenso wie die Adresse des Sensors (0 = 0x76, 1 = 0x77). 
+
+
+
 
 
       \section{USB-C}
@@ -95,7 +168,7 @@ In Tabelle \ref{tab:GPIO_Zuordnung} entsprechen S1 und S2 den beiden Tastern.
 \label{fig:USB-C_Schematik}
 \end{figure}
 
-Wie in Abbildung \ref{fig:USB-C_Schematik} zu sehen ist, sind beide CC-Pins der USB-C-Buchse über 5,1-k$\Omega$ Widerstände mit GND verbunden. Bei USB-C erfolgt über diese Pins der Austausch über die Verbindungskonfigurationen. Die 5,1-k$\Omega$ Widerstände signalisieren, dass es sich bei dem angeschlossenen Gerät um einen Verbraucher handelt, der maximal 15W Leistung aufnehmen darf \cite{USBC_Kommunikation}.
+Wie in Abbildung \ref{fig:USB-C_Schematik} zu sehen ist, sind beide CC-Pins der USB-C-Buchse über 5,1-k$\Omega$ Widerstände mit GND verbunden. Bei USB-C erfolgt über diese Pins der Austausch über die Verbindungskonfigurationen. Die 5,1-k$\Omega$ Widerstände signalisieren, dass es sich bei dem angeschlossenen Gerät um einen Verbraucher handelt, der maximal 15W Leistung aufnehmen darf \cite{USBCPowerDelivery}.
 
 \begin{figure}[H] 
   \centering
@@ -124,10 +197,10 @@ Wie in Abbildung \ref{fig:USB-C_Schematik} zu sehen ist, sind beide CC-Pins der 
 
 Da der Mikrocontroller, die Sensoren sowie das Display mit 3,3V arbeiten und die USB-C-Versorgung 5V bereitstellt, ist ein Spannungsregler notwendig. Verwendet wird der NJM12856 \cite{NJM12856}, da dieser mit 1000mA dem maximalen Strom des Geräts standhält (Tab. \ref{tab:Stromverbrauch}).
 
-Um den maximalen Stromverbrauch des Gerätes zu bestimmen, wurden folgende Werte aus den Datenblättern der einzelnen Komponenten entnommen: 
+Um den maximalen Stromverbrauch des Gerätes zu bestimmen, wurden folgende Werte aus den Datenblättern der einzelnen Komponenten \cite{Raspberry_Pi_Pico_W}, \cite{PASCO2V01}, \cite{BME688}, \cite{LCDDisplayDatasheet} entnommen: 
 
 
-\renewcommand{\arraystretch}{1.5}
+\renewcommand{\arraystretch}{1}
 
 \begin{table}[H]
 \centering
@@ -227,20 +300,87 @@ Die Beschaltung des TLV61046ADBVR (Abb. \ref{fig:12V Spannungswandler Schematik}
 \end{figure}
       
 
-   \section{Mikrocontroller}
-
-
-   
 
    \section{PCB Version 1}
    \label{ref:PCB_Version_1}
-   \section{PCB Version 2}
+
+
+   \begin{figure}[H] 
+  \centering
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[height=7cm]{files/Tobias/pics/Schaltungen/PCB/Version1_Top.PNG}
+    \caption{PCB Version 1 - Top Layer}
+    \label{fig:PCB_Version1_Top}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[height=7cm]{files/Tobias/pics/Schaltungen/PCB/Version1_Bottom.PNG}
+    \caption{PCB Version 1 - Bottom Layer}
+    \label{fig:PCB_Version1_Bot}
+  \end{subfigure}
+  \caption{PCB Version 1}
+  \label{fig:PCB_Version_1}
+\end{figure}
+
+Da das Display im Gehäuse befestigt wird und sich nicht direkt auf der Platine befindet, wurde ein JST XH 2.54mm-Stecker (Female) für dessen Verbindung benutzt. Als Taster wurden 2-1825027-0 Taster verwendet. Diese sind geknickt und haben eine Knopflänge von 9,24mm. Dadurch lassen sich die Taster gut in das Gehäuse integrieren. Für die Befestigung im Gehäuse wurden auf der Platine 2 Löcher für M3-Schrauben vorgesehen. Ein drittes Loch direkt unter dem Mikrocontroller dient nur als Platzhalter.
+
+  
+\section{PCB Version 2}
+
+
+   \begin{figure}[H] 
+  \centering
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[height=7cm]{files/Tobias/pics/Schaltungen/PCB/Version2_Top.PNG}
+    \caption{PCB Version 2 - Top Layer}
+    \label{fig:PCB_Version2_Top}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[height=7cm]{files/Tobias/pics/Schaltungen/PCB/Version2_Bottom.PNG}
+    \caption{PCB Version 2 - Bottom Layer}
+    \label{fig:PCB_Version2_Bot}
+  \end{subfigure}
+  \caption{PCB Version 2}
+  \label{fig:PCB_Version_2}
+\end{figure}
+
+Für eine bessere Benutzerfreundlichkeit wurde die USB-C-Buchse von der ursprünglich seitlichen Position auf die Rückseite des PCBs gesetzt. Ebenfalls vereinfacht dies die Integration in das Gehäuse. Dabei wurde von einer USB4125-Buchse auf eine USB4175-Buchse (Kap. \ref{sec:USB4125_75}) gewechselt. Zusätzlich wurde ein weiteres Loch für eine Schraube zur Befestigung im Gehäuse eingebaut. Die ursprünglichen Positionen der SMD-Bauteile sowie der Sensoren wurden ebenfalls geändert.
+
+   \begin{figure}[H] 
+  \centering
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[height=7cm]{files/Tobias/pics/Schaltungen/3D/Top_Layer_3D.PNG}
+    \caption{PCB Version 2 - Top Layer 3D Ansicht}
+    \label{fig:PCB_Version2_Top_3D}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[height=7cm]{files/Tobias/pics/Schaltungen/3D/Bottom_Layer_3D.PNG}
+    \caption{PCB Version 2 - Bottom Layer 3D Ansicht}
+    \label{fig:PCB_Version2_Bot_3D}
+  \end{subfigure}
+  \caption{PCB Version 2 - 3D Ansicht}
+  \label{fig:PCB_Version_2_3D}
+\end{figure}
+
+
 
 \section{Fertigung des PCBs/Prints}
 
+Die zweite PCB-Version wurde bei JCL PCB bestellt und im Anschluss eigenständig bestückt. Da der mitgelieferte Verbindungstecker das Displays sehr lange Kabel hat und diese im Gehäuse zu viel Platz verbrauchen würden, wurden diese von 18cm Länge auf 10cm gekürtzt. Am abgetrennten Ende wurde ein JST XH 2.54mm-Stecker (Male) befestigt.
+
+
+
 \section{Messungen}
 	\subsection{Spannungen}
-	\subsection{I2C}
-	\subsection{SPI}
+
+    Nach der Bestückung der Platine wurden die Versorgungsspannungen mit einem Multimeter überprüft. Sowohl die 3,3V- als auch die 12V-Versorgung waren mit minimalen Abweichungen korrekt.
 
 \end{inhalt}

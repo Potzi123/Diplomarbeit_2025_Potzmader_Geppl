@@ -4,7 +4,7 @@
 
 
 \section{Signup}
-
+\label{ref:Signup}
 Für Das Zuordnen der jeweiligen Benutzer ist es Notwendig das die User Sich einloggen können. Dafür muss ein Anmelde Komponente erstellt werden.
 
 \begin{figure}[!htb]
@@ -51,20 +51,38 @@ Nachdem der Nutzer erfolgreich registriert wurde, erfolgt eine Weiterleitung auf
 
 \subsection{Check Your Emails}
 
-Auf dieser Seite checkt die Seite ob im Table profiles \ref{}
+Auf dieser Seite wird überprüft, ob im Table \texttt{profiles} (siehe Referenz \ref{ref:profile-table-design}) das Feld \texttt{email\_confirmed\_at} gesetzt wurde und somit nicht mehr den Wert \texttt{null} enthält.  
 
-
-\section{Login}
-Für Das Zuordnen der jeweiligen Benutzer ist es Notwendig das die User Sich einlogen können
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/Login/login-screen.png}
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/emailconfirmed/checkyouremails_waiting_verification.png}
 \caption[Bildbezeichnung für Abbildungsverzeichnis]{}
 \label{fig:gehaeuse_internet_bild}
 \end{figure}
 
-Dafür wurde ein Login Komponente erstellt.
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/emailconfirmed/checkyouremails_verified.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\label{fig:gehaeuse_internet_bild}
+\end{figure}
+
+\clearpage
+
+Dies geschieht über die Echtzeitfunktionalität von Supabase, welche es ermöglicht, Daten in Echtzeit zu aktualisieren und Änderungen in der Datenbank unmittelbar zu erkennen.
+
+Sobald erkannt wird, dass die E-Mail-Adresse verifiziert wurde, erfolgt eine automatische Weiterleitung auf die \texttt{/login}-Seite.
+
+\begin{lstlisting}[style=mytsx]
+      router.push("/login");
+\end{lstlisting}    
+
+\newpage
+
+\section{Login}
+\label{ref:Login}
+Anschließend muss sich der Benutzer einloggen. Dieser Vorgang ist nahezu identisch mit dem Registrierungsprozess auf der \texttt{Sign-up}-Seite. 
 
 \begin{figure}[!htb]
 \centering
@@ -73,7 +91,9 @@ Dafür wurde ein Login Komponente erstellt.
 \label{fig:gehaeuse_internet_bild}
 \end{figure}
 
-Für das Login Komponent wurde Zod für die überprüfung von 
+
+Allerdings wird anstelle der \texttt{insert\_user}-Funktion zur Registrierung nun die \texttt{login\_user}-Funktion verwendet.
+Da durch die E-Mail-Verifizierung keine automatische Benutzer-Session gestartet wird, muss der Benutzer sich manuell einloggen, um eine Session zu starten.
 
 \begin{lstlisting}[style=mytsx]
 export async function login_user(email: string, password: string) {
@@ -86,6 +106,310 @@ export async function login_user(email: string, password: string) {
 }
 \end{lstlisting}
 
+\clearpage
+
+\newpage
+
+\section{Setup Profile}
+
+Wenn ein Benutzer versucht, auf die \texttt{/setup-profile}-Seite zuzugreifen, und bereits angemeldet ist, wird überprüft, ob im Profil entweder der Benutzername, der Vorname oder der Nachname fehlt.  
+Falls einer dieser Werte nicht gesetzt ist, wird der Benutzer automatisch durch die Middleware (siehe \ref{ref:middelware}) auf die entsprechende Seite weitergeleitet.
+
+\vspace{1cm}
+
+Die \texttt{/setup-profile}-Seite dient dazu, sicherzustellen, dass jeder Benutzer einen Benutzernamen, einen Vornamen und einen Nachnamen angegeben hat und diese Informationen vollständig vorliegen.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/setup-profile/setup-profile.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\label{fig:gehaeuse_internet_bild}
+\end{figure}
+
+\clearpage
+
+Diese Seite besteht ebenfalls aus einer Komponente, die ähnlich zur \texttt{Login}- und \texttt{Signup}-Komponente aufgebaut ist (siehe \ref{ref:Signup}, \ref{ref:Login}).
+
+Der wesentliche Unterschied zwischen dem \texttt{Login}-Formular und der \texttt{Setup-Profile}-Seite besteht darin, dass auf der \texttt{Setup-Profile}-Seite zusätzlich ein Avatar hinzugefügt oder gelöscht werden kann.
+
+\begin{lstlisting}[style=mytsx]
+<AvatarUpload
+    userName={form.getValues("first_name") || "User"}
+    userId={userId || undefined}
+    onImageChange={handleImageChange}
+/>
+\end{lstlisting}
+
+\subsection{Funktionalitäten der AvatarUpload-Komponente}
+
+Die \texttt{AvatarUpload}-Komponente stellt ein zentrales Element der Benutzerprofilseite (\texttt{/setup-profile}) dar. Sie ermöglicht eine intuitive Verwaltung von Profilbildern und gewährleistet eine konsistente visuelle Darstellung im gesamten System. Die Komponente implementiert vier Kernfunktionalitäten:
+
+\subsubsection{Hochladen eines neuen Avatars mit Live-Vorschau}
+Die Komponente ermöglicht das Hochladen von Profilbildern mit sofortiger Vorschau. Der Prozess umfasst:
+\begin{itemize}
+    \item Dateiauswahl aus dem lokalen Dateisystem
+    \item Automatische Validierung (max. 5MB, nur Bildformate)
+    \item Sofortige Vorschau ohne direkten Server-Upload
+\end{itemize}
+
+\begin{lstlisting}[style=mytsx, caption={Implementierung des Avatar-Uploads mit Validierung}, label={lst:avatar_upload}]
+const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const file = event.target.files?.[0];
+  if (!file || !validateFile(file)) return;
+
+  try {
+    const fileExtension = file.type === "image/jpeg" ? "jpg" : "png";
+    const standardizedFile = new File(
+      [file], 
+      `avatar.${fileExtension}`, 
+      { type: file.type }
+    );
+    const previewUrl = URL.createObjectURL(file);
+
+    setState(prev => ({
+      ...prev,
+      selectedFile: standardizedFile,
+      previewUrl,
+      avatarAction: "upload"
+    }));
+  } catch (error) {
+    toast({
+      title: "Fehler",
+      description: "Datei konnte nicht verarbeitet werden."
+    });
+  }
+};
+\end{lstlisting}
+
+\subsubsection{Entfernen bestehender Avatare}
+Ein vorhandenes Profilbild kann über eine dedizierte Schaltfläche entfernt werden:
+\begin{itemize}
+    \item Visuelles Feedback durch \texttt{X}-Symbol
+    \item Sofortige Aktualisierung der Anzeige
+    \item Markierung zur Löschung beim nächsten Speichervorgang
+\end{itemize}
+
+\begin{lstlisting}[style=mytsx, caption={Implementierung der Avatar-Löschung}, label={lst:avatar_delete}]
+const handleRemoveAvatar = async () => {
+  try {
+    setState(prev => ({
+      ...prev,
+      selectedFile: null,
+      previewUrl: null,
+      avatarAction: "delete"
+    }));
+    
+    window.dispatchEvent(new CustomEvent("avatarChanged", {
+      detail: { userId, action: "delete" }
+    }));
+  } catch (error) {
+    toast({
+      title: "Fehler",
+      description: "Avatar konnte nicht entfernt werden."
+    });
+  }
+};
+\end{lstlisting}
+
+\subsubsection{Intelligente Fallback-Darstellung}
+Bei fehlendem Profilbild generiert die Komponente automatisch einen visuellen Platzhalter:
+\begin{itemize}
+    \item Extraktion der Benutzerinitialen aus dem Namen
+    \item Konsistente Darstellung im UI-Design
+    \item Automatische Anpassung an verschiedene Namensformate
+\end{itemize}
+
+\begin{lstlisting}[style=mytsx, caption={Generierung der Fallback-Initialen}, label={lst:avatar_initials}]
+const getInitials = (name: string): string => {
+  if (!name) return "??";
+  const parts = name.split(" ");
+  return parts.length === 1
+    ? parts[0].substring(0, 2).toUpperCase()
+    : (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+};
+\end{lstlisting}
+
+\subsubsection{Echtzeit-Synchronisation}
+Die Komponente nutzt Supabase Realtime für die Live-Synchronisation:
+\begin{itemize}
+    \item Automatische Aktualisierung bei externen Änderungen
+    \item Effiziente Subscription-Verwaltung
+    \item Robuste Fehlerbehandlung
+\end{itemize}
+
+\begin{lstlisting}[style=mytsx, caption={Implementierung der Echtzeit-Synchronisation}, label={lst:avatar_subscription}]
+useEffect(() => {
+  if (!userId) return;
+  
+  let mounted = true;
+  const setupSubscription = async () => {
+    try {
+      const channel = await subscribeToAvatarChanges(userId, () => {
+        if (mounted) refreshAvatar();
+      });
+      if (mounted) channelRef.current = channel;
+    } catch (error) {
+      console.error("Subscription fehlgeschlagen:", error);
+    }
+  };
+
+  setupSubscription();
+  return () => {
+    mounted = false;
+    if (channelRef.current) unsubscribe(channelRef.current);
+  };
+}, [userId]);
+\end{lstlisting}
+
+Die \texttt{AvatarUpload}-Komponente vereint somit moderne Webtechnologien mit benutzerfreundlicher Funktionalität und robuster Fehlerbehandlung. Durch die Verwendung von TypeScript und React-Hooks wird eine wartbare und typsichere Implementierung gewährleistet.
+
+
+
+
+
+
+
+\newpage
+
+\section{Middleware}
+\label{ref:middelware}
+
+Die Datei \texttt{middleware.ts} ist ein zentraler Bestandteil der Anwendung und wird bei jedem Seitenaufruf ausgeführt.  
+Sie übernimmt wichtige Aufgaben im Bereich Sicherheit, Weiterleitung und Zustandskontrolle der Anwendung.  
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/middleware/middleware.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\label{fig:middleware}
+\end{figure}
+
+Die Middleware wird automatisch bei jedem Aufruf einer Seite ausgeführt, sofern der aufgerufene Pfad nicht explizit ausgeschlossen wurde.  
+Dadurch lassen sich serverseitige Logiken zentral abbilden, wie z.\,B. Authentifizierungsprüfungen, Weiterleitungen oder Cookie-Handling.
+
+\subsection*{Wichtige Funktionen der Middleware}
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item \textbf{Authentifizierung und Autorisierung}
+  \begin{itemize}
+    \item Überprüfung, ob ein Benutzer eingeloggt ist, mittels \texttt{supabase.auth.getUser()}
+    \item Nicht eingeloggte Benutzer werden zur Login-Seite weitergeleitet
+    \item Eingeloggte Benutzer, die sich auf Auth-Seiten befinden (z.\,B. \texttt{/login}, \texttt{/signup}), werden automatisch zum Dashboard umgeleitet
+  \end{itemize}
+
+  \item \textbf{Profilüberprüfung}
+  \begin{itemize}
+    \item Die Middleware prüft, ob das Benutzerprofil vollständig ist (Vorname, Nachname, Benutzername)
+    \item Bei unvollständigem Profil erfolgt eine Weiterleitung zur \texttt{/setup-profile}-Seite
+  \end{itemize}
+
+  \item \textbf{Admin-Berechtigungen}
+  \begin{itemize}
+    \item Für Admin-Routen (\texttt{/admin/*}) wird geprüft, ob der Benutzer die Rolle \texttt{admin} besitzt
+    \item Andernfalls erfolgt eine automatische Weiterleitung zum Dashboard
+  \end{itemize}
+
+  \item \textbf{Cookie-Management}
+  \begin{itemize}
+    \item Es werden Standard-Cookies wie \texttt{theme} und \texttt{activeSchool} gesetzt
+    \item Die Authentifizierung erfolgt mithilfe des Supabase-Cookie-Managements
+  \end{itemize}
+
+  \item \textbf{Routing-Logik}
+  Die Routing-Logik prüft anhand des Authentifizierungsstatus, ob ein Benutzer weitergeleitet werden muss:
+
+  \begin{lstlisting}[language=TypeScript]
+if (!user) {
+  // Nicht eingeloggte Benutzer
+  if (!isAuthRoute) {
+    return NextResponse.redirect(redirectUrl)
+  }
+} else {
+  // Eingeloggte Benutzer
+  if (isAuthRoute) {
+    return NextResponse.redirect(redirectUrl)
+  }
+}
+  \end{lstlisting}
+
+  \item \textbf{Matcher-Konfiguration}
+  Die \texttt{matcher}-Konfiguration legt fest, auf welchen Routen die Middleware ausgeführt werden soll:
+
+\begin{lstlisting}[language=TypeScript]
+matcher: [
+  '/((?!_next/static|_next/image|favicon.ico|public/|api/|.*\\.(?:svg|png|jpg|jpeg|gif|webp|js|css)$).*)',
+]
+\end{lstlisting}
+  \begin{itemize}
+    \item Diese Konfiguration schließt statische Dateien, API-Endpunkte und öffentliche Assets explizit aus
+  \end{itemize}
+\end{enumerate}
+
+
+
+
+
+
+\clearpage
+
+\newpage
+
+\section{Seitenleiste}
+
+Die Seitenleiste ist dafür verantwortlich für die navigation zwischen den Verschiedene Klassen und und Abteiltungen und Schulen.
+
+Die Seitenleiste ist augebaut aus den Folgenden Komponenten
+
+\begin{itemize}
+    \item school-swticher
+    \item nav-departments-classes-devices
+    \item nav-user
+\end{itemize}
+
+%%% Bild einfügen von der Struktur
+
+\subsection{School-Swticher}
+
+Die school-switcher Komponente ist dafür da um die Schule auszuwählen und die Schule zu verändern.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/Sidebar/school-switcher/school-switcher.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\label{fig:gehaeuse_internet_bild}
+\end{figure}
+
+\clearpage
+
+Wenn man nun ein Admin ist und man möcte die Schule verändern muss man einfach auf die Koponente klicken öffnet sich ein Fenster wo man zwischen den verschiedensten Schulen auswählen kann. Schüler Lehere und Direktoren können nicht die Schule verändern
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/Sidebar/school-switcher/school-switcher-open.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\label{fig:gehaeuse_internet_bild}
+\end{figure}
+
+\clearpage
+
+Die ausgewählte Schule wird anschließend in einem Cookie gespeichert, um beim nächsten Aufruf der Seite nicht zurückgesetzt zu werden.  
+Im folgenden Codebeispiel wird das Cookie clientseitig unter dem Namen \texttt{activeSchool} gespeichert und enthält den Wert der UUID der Schul-ID.
+
+Das Attribut \texttt{secure} stellt sicher, dass das Cookie nur über HTTPS übertragen wird.  
+Da dies jedoch nur in der Produktionsumgebung gelten soll, wird die Einstellung über \texttt{process.env.NODE\_ENV} gesteuert.  
+Das Attribut \texttt{sameSite} ist auf \texttt{lax} gesetzt, wodurch das Cookie bei normaler Navigation und GET-Anfragen gesendet wird.  
+Der \texttt{path} definiert, für welche Pfade das Cookie verfügbar ist; in diesem Fall ist es auf der gesamten Webseite verfügbar.
+
+
+\begin{lstlisting}[language=TypeScript]
+    Cookies.set('activeSchool', school.id, {
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          path: '/',
+        });
+\end{lstlisting}
+
+%%% ADD School maby
 
 
 
@@ -95,29 +419,203 @@ export async function login_user(email: string, password: string) {
 
 
 
+\subsection{nav-departments-classes-devices}
 
 
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/Sidebar/nav-departments-classes-devices/nav-screen.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\label{fig:gehaeuse_internet_bild}
+\end{figure}
+
+\clearpage
 
 
+Die Aufgabe der nav-departments-classes-devices Komponente ist das Man zwischen den Abteilungen Klassen und Sensoren umher Navigiren kann. Damit erkannt wird in welcher Schule man sich Befindet wurde eine Speziele URL Addresse entworden:
+
+\begin{lstlisting}[language=TypeScript]
+
+domainname/uuid-der-schule/dashboard?department=uuid-in dem-Department-man-gerae-ist&class=uuid-in-welcher-Klasse-man-sich-gerade befindet&device=device-uuid
+
+Beispiel
+
+domainname/0d3e37cf-8350-46f2-823b-26dd90c01266/dashboard?department=e1ed2bd8-4c9c-40f8-bec7-4edcebe59fc1&class=eb4355fd-1e98-4961-be62-36fa9fc5cec0&device=a52eb8dc-5df5-475a-8a9f-f5f5a24ac2d3
+\end{lstlisting}
 
 
+%%% gehört vlt noch was hin 
+
+\subsection{nav-user}
+
+Die nav-user Komponente ist im SidebarFooter(Am Boden der Seitenleiste). Sie ist verantwortlich dafür das sie vom Benutzer den Benutzernamen die E-Mail Addresse den Avatar anzeigt
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/Sidebar/nav-user/user-component.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\label{fig:gehaeuse_internet_bild}
+\end{figure}
+
+\clearpage
+
+Außerdem ist es auch noch da um Auf den Profil Editor des Bentuzers zu kommen. Wenn man ein Admin ist kann man auch auf die Administrator Seiten der Website kommen und es gibt noch eine Settings Seite und einen Logout Knopf um sich abzumelden. 
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/Sidebar/nav-user/user-component-open.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\label{fig:gehaeuse_internet_bild}
+\end{figure}
+
+\clearpage
+
+Beim Abmelden von der Seite wird als erstes  gewarted bis die signOut funktion ein success zurück bekommt danach wird der user auf die Lgin seite weitergeleitet. 
+
+\begin{lstlisting}[language=TypeScript]
+  const handleSignOut = async () => {
+    const { success, error } = await signOut();
+    if (success) {
+      router.push("/login");
+    } else {
+      console.error("Error signing out:", error);
+    }
+  };
+\end{lstlisting}
 
 
+\newpage
+
+\section{Settings Seite}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/Settings/settings-screen.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\label{fig:gehaeuse_internet_bild}
+\end{figure}
+
+\clearpage
+
+Die Settings(Einstellungs Seite hat nur eine Aufgabe und zward den Theme zu wechseln dieser wird dann wieder in den Cookies gespeichet mit den Namen theme um bei einen Refresh nicht den Theme zu verlieren.
+
+\vspace{2cm}
+
+In diesn Code wird ein Schalter eingesetzt um in den Dunklen Modus oder den Hellen Modus zu wechseln. Dieser Switch hat die id dark-mode und eine Variable die den Wert des Schalters annimt am Schluss wird jedes mal wenn der Schalter geschalten wird wird die Funktion "toggelTheme" aufgerufen um die Cookies und den Theme der Seite zu verändern.
 
 
+\begin{lstlisting}[language=TypeScript]
+<Switch
+    id="dark-mode"
+    checked={isDarkMode}
+    onCheckedChange={toggleTheme}
+  />
+\end{lstlisting}
+
+\newpage
+
+\section{Profile Seite}
+
+Die Profile Seite ist eigetnlich die Profile-Setup Seite um den Benutzer die Möglichkeit zu geben das Profil Bild den Vorname Nachnmaen und Bentuzernamen zu aktualisieren.
 
 
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/Profile/profile-screen.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\label{fig:gehaeuse_internet_bild}
+\end{figure}
 
-
-
-
-
-
-
+\newpage
 
 \section{Admin Dashboard}
 
 Das Admin Dashboard ist dafür da um alle User, Geräte, Klassen, Abteilungen und Schulen zu Erstellen oder zu Löschen. 
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/admin/devices/devices-screen.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\label{fig:gehaeuse_internet_bild}
+\end{figure}
+
+\clearpage
+
+
+In dem Bild kann man sehen wie das Dashboard der Sensoren ausschaut.
+
+\subsection{Tabele}
+
+Jeder Table hat außer die User Table die ist speziel hat am anfag die uuid von den Strukturelementen. Diese Last sich immer ganz einfach kopiern durch einen Button. Danach wird der Name angezeigt und nachdem wird der Zeitpunkt der Erstellung des Strukturelementes angeziegt und am schluss eine Möglichkeit diese Strukturelemente zu löschen. 
+
+
+%%% code hinzufügen 
+
+\subsubsection{School Table}
+
+google
+
+
+
+\subsection{Erstellen}
+
+Beim Erstellen muss sich 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+
+\section{Dashboard}
+
+\newpage
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+
+\section{Admin Dashboard}
+
+
 
 \subsection{Tables}
 
@@ -205,19 +703,33 @@ Die Entscheidung, die Autovervollständigung über das genannte Package zu reali
 
 \subsection{Schools-Map}
 
-\subsubsubsection{Google API Maps}
+\subsubsection{Google API Maps}
 
 In
 
+\newpage
 
 \section{Dashboard}
+
+
+
+
+\newpage
 
 \section{Backend}
 
 
 
-API route
 
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/backend/image.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\label{fig:gehaeuse_internet_bild}
+\end{figure}
+
+\clearpage
 
 
 
