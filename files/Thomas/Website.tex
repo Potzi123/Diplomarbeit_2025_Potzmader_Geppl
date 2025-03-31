@@ -5,12 +5,14 @@
 
 \section{Signup}
 \label{ref:Signup}
-Für Das Zuordnen der jeweiligen Benutzer ist es Notwendig das die User Sich einloggen können. Dafür muss ein Anmelde Komponente erstellt werden.
+Für die Zuordnung der jeweiligen Benutzer ist es notwendig, dass sich die Nutzer einloggen können.  
+Hierfür wurde eine Registrierkomponente erstellt, die den Registrier-Prozess ermöglicht.
+
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/Signup/sign-up.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\includegraphics[width=0.5\textwidth]{files/Thomas/pics/Website/Signup/sign-up.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{Registrierkomponente}
 \label{fig:gehaeuse_internet_bild}
 \end{figure}
 
@@ -28,6 +30,8 @@ const formSchema = z.object({
 })
 \end{lstlisting}
 \index{Code Snippet 1@\hyperref[code:snippet1]{Snippet 1}}
+
+\newpage
 
 Für den Registrierungsvorgang wurde eine Funktion implementiert, die die eingegebene E-Mail-Adresse sowie das Passwort entgegennimmt und diese über eine Funktion des Supabase-Auth-Services im System registriert.
 
@@ -54,21 +58,26 @@ Nachdem der Nutzer erfolgreich registriert wurde, erfolgt eine Weiterleitung auf
 Auf dieser Seite wird überprüft, ob im Table \texttt{profiles} (siehe Referenz \ref{ref:profile-table-design}) das Feld \texttt{email\_confirmed\_at} gesetzt wurde und somit nicht mehr den Wert \texttt{null} enthält.  
 
 
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/emailconfirmed/checkyouremails_waiting_verification.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
-\label{fig:gehaeuse_internet_bild}
+
+\begin{figure}[H] 
+  \centering
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=1\textwidth]{files/Thomas/pics/Website/emailconfirmed/checkyouremails_waiting_verification.png}
+    \caption{Email - Warte auf Verifikation}
+    \label{fig:email_waiting_verification}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=1\textwidth]{files/Thomas/pics/Website/emailconfirmed/checkyouremails_verified.png}
+    \caption{Email - Verifiziert}
+    \label{fig:email_verified}
+  \end{subfigure}
+  \caption{Email Verifikation Status}
+  \label{fig:email_verification_states}
 \end{figure}
 
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/emailconfirmed/checkyouremails_verified.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
-\label{fig:gehaeuse_internet_bild}
-\end{figure}
-
-\clearpage
 
 Dies geschieht über die Echtzeitfunktionalität von Supabase, welche es ermöglicht, Daten in Echtzeit zu aktualisieren und Änderungen in der Datenbank unmittelbar zu erkennen.
 
@@ -76,9 +85,8 @@ Sobald erkannt wird, dass die E-Mail-Adresse verifiziert wurde, erfolgt eine aut
 
 \begin{lstlisting}[style=mytsx]
       router.push("/login");
-\end{lstlisting}    
+\end{lstlisting}     
 
-\newpage
 
 \section{Login}
 \label{ref:Login}
@@ -86,7 +94,7 @@ Anschließend muss sich der Benutzer einloggen. Dieser Vorgang ist nahezu identi
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/Login/login.png}
+\includegraphics[width=0.5\textwidth]{files/Thomas/pics/Website/Login/login.png}
 \caption[Bildbezeichnung für Abbildungsverzeichnis]{}
 \label{fig:gehaeuse_internet_bild}
 \end{figure}
@@ -115,13 +123,13 @@ export async function login_user(email: string, password: string) {
 Wenn ein Benutzer versucht, auf die \texttt{/setup-profile}-Seite zuzugreifen, und bereits angemeldet ist, wird überprüft, ob im Profil entweder der Benutzername, der Vorname oder der Nachname fehlt.  
 Falls einer dieser Werte nicht gesetzt ist, wird der Benutzer automatisch durch die Middleware (siehe \ref{ref:middelware}) auf die entsprechende Seite weitergeleitet.
 
-\vspace{1cm}
+\vspace{0.25cm}
 
 Die \texttt{/setup-profile}-Seite dient dazu, sicherzustellen, dass jeder Benutzer einen Benutzernamen, einen Vornamen und einen Nachnamen angegeben hat und diese Informationen vollständig vorliegen.
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/setup-profile/setup-profile.png}
+\includegraphics[width=0.55\textwidth]{files/Thomas/pics/Website/setup-profile/setup-profile.png}
 \caption[Bildbezeichnung für Abbildungsverzeichnis]{}
 \label{fig:gehaeuse_internet_bild}
 \end{figure}
@@ -144,7 +152,10 @@ Der wesentliche Unterschied zwischen dem \texttt{Login}-Formular und der \texttt
 
 Die \texttt{AvatarUpload}-Komponente stellt ein zentrales Element der Benutzerprofilseite (\texttt{/setup-profile}) dar. Sie ermöglicht eine intuitive Verwaltung von Profilbildern und gewährleistet eine konsistente visuelle Darstellung im gesamten System. Die Komponente implementiert vier Kernfunktionalitäten:
 
-\subsubsection{Hochladen eines neuen Avatars mit Live-Vorschau}
+\vspace{1cm}
+
+\textbf{Hochladen eines neuen Avatars mit Live-Vorschau}
+\vspace{0.1cm}
 Die Komponente ermöglicht das Hochladen von Profilbildern mit sofortiger Vorschau. Der Prozess umfasst:
 \begin{itemize}
     \item Dateiauswahl aus dem lokalen Dateisystem
@@ -274,15 +285,15 @@ Die \texttt{AvatarUpload}-Komponente vereint somit moderne Webtechnologien mit b
 \section{Middleware}
 \label{ref:middelware}
 
-Die Datei \texttt{middleware.ts} ist ein zentraler Bestandteil der Anwendung und wird bei jedem Seitenaufruf ausgeführt.  
+Die Datei \texttt{middleware} ist ein zentraler Bestandteil der Anwendung und wird bei jedem Seitenaufruf ausgeführt.  
 Sie übernimmt wichtige Aufgaben im Bereich Sicherheit, Weiterleitung und Zustandskontrolle der Anwendung.  
 
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/middleware/middleware.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
-\label{fig:middleware}
-\end{figure}
+%\begin{figure}[!htb]
+%\centering
+%\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/middleware/middleware.png}
+%\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+%\label{fig:middleware}
+%\end{figure}
 
 Die Middleware wird automatisch bei jedem Aufruf einer Seite ausgeführt, sofern der aufgerufene Pfad nicht explizit ausgeschlossen wurde.  
 Dadurch lassen sich serverseitige Logiken zentral abbilden, wie z.\,B. Authentifizierungsprüfungen, Weiterleitungen oder Cookie-Handling.
@@ -315,38 +326,49 @@ Dadurch lassen sich serverseitige Logiken zentral abbilden, wie z.\,B. Authentif
     \item Die Authentifizierung erfolgt mithilfe des Supabase-Cookie-Managements
   \end{itemize}
 
+\newpage
+
   \item \textbf{Routing-Logik}
   Die Routing-Logik prüft anhand des Authentifizierungsstatus, ob ein Benutzer weitergeleitet werden muss:
 
-  \begin{lstlisting}[language=TypeScript]
-if (!user) {
-  // Nicht eingeloggte Benutzer
-  if (!isAuthRoute) {
-    return NextResponse.redirect(redirectUrl)
-  }
-} else {
-  // Eingeloggte Benutzer
-  if (isAuthRoute) {
-    return NextResponse.redirect(redirectUrl)
-  }
-}
+
+\begin{lstlisting}[style=mytsx]
+  if (!user) {
+    // If user is not logged in
+    const isAuthRoute = path === '/login' || 
+                        path === '/signup' || 
+                        path === '/checkyouremails'
+    
+    if (!isAuthRoute) {
+      // Redirect unauthenticated users to login page
+      const redirectUrl = new URL('/login', request.url)
+      return NextResponse.redirect(redirectUrl)
+    }
+  } else {
+    // If user is logged in
+    const isAuthRoute = path === '/login' || 
+                        path === '/signup' || 
+                        path === '/'
+    
+    if (isAuthRoute) {
+      // Redirect authenticated users to dashboard
+      const redirectUrl = new URL('/dashboard', request.url)
+      return NextResponse.redirect(redirectUrl)
+    }
+
   \end{lstlisting}
 
   \item \textbf{Matcher-Konfiguration}
-  Die \texttt{matcher}-Konfiguration legt fest, auf welchen Routen die Middleware ausgeführt werden soll:
+  Die \texttt{matcher}-Konfiguration legt fest, auf welchen Routen die Middleware ausgeführt werden soll in diesen Falle auf fast alle:
 
 \begin{lstlisting}[language=TypeScript]
 matcher: [
-  '/((?!_next/static|_next/image|favicon.ico|public/|api/|.*\\.(?:svg|png|jpg|jpeg|gif|webp|js|css)$).*)',
+  '/((?!_next/static|_next/image|favicon.ico|public/|api/|.
+  *\\.(?:svg|png|jpg|jpeg|gif|webp|js|css)$).*)',
 ]
+
+
 \end{lstlisting}
-  \begin{itemize}
-    \item Diese Konfiguration schließt statische Dateien, API-Endpunkte und öffentliche Assets explizit aus
-  \end{itemize}
-\end{enumerate}
-
-
-
 
 
 
@@ -356,9 +378,9 @@ matcher: [
 
 \section{Seitenleiste}
 
-Die Seitenleiste ist dafür verantwortlich für die navigation zwischen den Verschiedene Klassen und und Abteiltungen und Schulen.
+Die Seitenleiste ist für die Navigation zwischen den verschiedenen Klassen, Abteilungen und Schulen verantwortlich.  
 
-Die Seitenleiste ist augebaut aus den Folgenden Komponenten
+Der Aufbau der Seitenleiste besteht aus den folgenden Komponenten:
 
 \begin{itemize}
     \item school-swticher
@@ -368,46 +390,52 @@ Die Seitenleiste ist augebaut aus den Folgenden Komponenten
 
 %%% Bild einfügen von der Struktur
 
-\subsection{School-Swticher}
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/Sidebar/sidebar-aufbau.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\label{fig:gehaeuse_internet_bild}
+\end{figure}
 
-Die school-switcher Komponente ist dafür da um die Schule auszuwählen und die Schule zu verändern.
+\newpage
+
+\subsection{School-Switcher}
+
+Die \texttt{school-switcher}-Komponente dient dazu, die aktuelle Schule auszuwählen bzw. zu wechseln.
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=1\textwidth]{files/Thomas/pics/Website/Sidebar/school-switcher/school-switcher.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
-\label{fig:gehaeuse_internet_bild}
+\caption[School-Switcher Komponente geschlossen]{School-Switcher Komponente im geschlossenen Zustand}
+\label{fig:school_switcher_closed}
 \end{figure}
 
-\clearpage
-
-Wenn man nun ein Admin ist und man möcte die Schule verändern muss man einfach auf die Koponente klicken öffnet sich ein Fenster wo man zwischen den verschiedensten Schulen auswählen kann. Schüler Lehere und Direktoren können nicht die Schule verändern
+Administratoren können über einen Klick auf die Komponente ein Auswahlfenster öffnen, in dem sie zwischen den verfügbaren Schulen wählen können.  
+Schüler, Lehrer und Direktoren besitzen hingegen keine Berechtigung, die Schule zu ändern.
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/Sidebar/school-switcher/school-switcher-open.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
-\label{fig:gehaeuse_internet_bild}
+\includegraphics[width=0.75\textwidth]{files/Thomas/pics/Website/Sidebar/school-switcher/school-switcher-open.png}
+\caption[School-Switcher geöffnet]{School-Switcher Komponente im geöffneten Zustand}
+\label{fig:school_switcher_open}
 \end{figure}
 
-\clearpage
+Die ausgewählte Schule wird anschließend in einem Cookie gespeichert, um beim nächsten Aufruf der Webseite automatisch wiederhergestellt zu werden.  
+Im folgenden Codebeispiel wird das Cookie clientseitig unter dem Namen \texttt{activeSchool} gesetzt und speichert die \texttt{UUID} der Schul-ID.
 
-Die ausgewählte Schule wird anschließend in einem Cookie gespeichert, um beim nächsten Aufruf der Seite nicht zurückgesetzt zu werden.  
-Im folgenden Codebeispiel wird das Cookie clientseitig unter dem Namen \texttt{activeSchool} gespeichert und enthält den Wert der UUID der Schul-ID.
-
-Das Attribut \texttt{secure} stellt sicher, dass das Cookie nur über HTTPS übertragen wird.  
-Da dies jedoch nur in der Produktionsumgebung gelten soll, wird die Einstellung über \texttt{process.env.NODE\_ENV} gesteuert.  
-Das Attribut \texttt{sameSite} ist auf \texttt{lax} gesetzt, wodurch das Cookie bei normaler Navigation und GET-Anfragen gesendet wird.  
-Der \texttt{path} definiert, für welche Pfade das Cookie verfügbar ist; in diesem Fall ist es auf der gesamten Webseite verfügbar.
-
+Das Attribut \texttt{secure} sorgt dafür, dass das Cookie nur über HTTPS gesendet wird.  
+Da dies jedoch nur in der Produktionsumgebung erforderlich ist, wird die Einstellung über \texttt{process.env.NODE\_ENV} gesteuert.  
+Durch die Einstellung \texttt{sameSite = lax} wird das Cookie nur bei normaler Navigation und GET-Anfragen mitgesendet.  
+Der Parameter \texttt{path} legt fest, dass das Cookie auf der gesamten Webseite verfügbar ist.
 
 \begin{lstlisting}[language=TypeScript]
-    Cookies.set('activeSchool', school.id, {
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'lax',
-          path: '/',
-        });
+Cookies.set('activeSchool', school.id, {
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+});
 \end{lstlisting}
+
 
 %%% ADD School maby
 
@@ -424,12 +452,11 @@ Der \texttt{path} definiert, für welche Pfade das Cookie verfügbar ist; in die
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/Sidebar/nav-departments-classes-devices/nav-screen.png}
+\includegraphics[width=0.5\textwidth]{files/Thomas/pics/Website/Sidebar/nav-departments-classes-devices/nav-screen.png}
 \caption[Bildbezeichnung für Abbildungsverzeichnis]{}
 \label{fig:gehaeuse_internet_bild}
 \end{figure}
 
-\clearpage
 
 
 Die Aufgabe der nav-departments-classes-devices Komponente ist das Man zwischen den Abteilungen Klassen und Sensoren umher Navigiren kann. Damit erkannt wird in welcher Schule man sich Befindet wurde eine Speziele URL Addresse entworden:
@@ -452,7 +479,7 @@ Die nav-user Komponente ist im SidebarFooter(Am Boden der Seitenleiste). Sie ist
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/Sidebar/nav-user/user-component.png}
+\includegraphics[width=0.5\textwidth]{files/Thomas/pics/Website/Sidebar/nav-user/user-component.png}
 \caption[Bildbezeichnung für Abbildungsverzeichnis]{}
 \label{fig:gehaeuse_internet_bild}
 \end{figure}
@@ -463,12 +490,12 @@ Außerdem ist es auch noch da um Auf den Profil Editor des Bentuzers zu kommen. 
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/Sidebar/nav-user/user-component-open.png}
+\includegraphics[width=0.5\textwidth]{files/Thomas/pics/Website/Sidebar/nav-user/user-component-open.png}
 \caption[Bildbezeichnung für Abbildungsverzeichnis]{}
 \label{fig:gehaeuse_internet_bild}
 \end{figure}
 
-\clearpage
+
 
 Beim Abmelden von der Seite wird als erstes  gewarted bis die signOut funktion ein success zurück bekommt danach wird der user auf die Lgin seite weitergeleitet. 
 
@@ -495,7 +522,6 @@ Beim Abmelden von der Seite wird als erstes  gewarted bis die signOut funktion e
 \label{fig:gehaeuse_internet_bild}
 \end{figure}
 
-\clearpage
 
 Die Settings(Einstellungs Seite hat nur eine Aufgabe und zward den Theme zu wechseln dieser wird dann wieder in den Cookies gespeichet mit den Namen theme um bei einen Refresh nicht den Theme zu verlieren.
 
@@ -561,155 +587,6 @@ google
 
 Beim Erstellen muss sich 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\newpage
-
-\section{Dashboard}
-
-\newpage
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\newpage
-
-\section{Admin Dashboard}
-
-
-
-\subsection{Tables}
-
-\subsubsection{School}
-
-\subsubsection{Departments}
-
-\subsubsection{Class}
-
-\subsubsection{Devices}
-
-\subsubsection{User}
-
-\subsection{Create}
-
-Auf allen Seiten der Administrationsoberfläche kommt ein spezielles \emph{Create}-Component zum Einsatz, das jeweils für die Erstellung einzelner Objekte zuständig ist. Die Namensgebung folgt dabei einer klaren Konvention, beispielsweise \texttt{create-school.tsx} für den Schulbereich. Der Begriff \emph{Create} leitet sich aus dem englischen Begriff „erstellen“ ab, was die primäre Funktion dieser Komponente treffend beschreibt.
-
-Jede dieser Komponenten ist individuell auf die jeweilige Entität zugeschnitten, um eine optimale Handhabung und Validierung der Eingabedaten zu gewährleisten. Nach erfolgreicher Erstellung werden die eingegebenen Daten in der Supabase-Datenbank gespeichert, was eine konsistente und strukturierte Datenhaltung ermöglicht.
-
-\subsubsection{School}
-
-
-
-
-
-
-Im Folgenden wird erläutert, wie in diesem Projekt die Autovervollständigung für Adressen mithilfe der Google API implementiert wurde.
-
-\subsubsection{Google API für Autovervollständigung}
-
-Für die Implementierung der Autovervollständigung wurde das npm-Package \texttt{react-google-maps-api} eingesetzt. Diese Lösung bietet eine einfache Möglichkeit, Google-basierte Adressvorschläge in das Projekt zu integrieren. Hierfür musste im Google-Dashboard die neue Places API aktiviert werden, da seit dem 17.03.2025 keine Legacy-Version mehr verfügbar ist.
-
-Das verwendete \texttt{AddressAutocomplete}-Component stellt ein Beispiel für die Umsetzung dar:
-
-\begin{lstlisting}[style=mytsx]
-<AddressAutocomplete
-  value={field.value}
-  onChange={field.onChange}
-  onBlur={field.onBlur}
-/>
-\end{lstlisting}
-
-Mit diesem Component kann der Benutzer eine Adresse oder einen Ort suchen. Google liefert daraufhin entsprechende Vorschläge, die anschließend in einem JSON-Format gespeichert werden. Ein exemplarischer Aufbau des JSON-Objekts sieht folgendermaßen aus:
-
-\begin{lstlisting}[style=myjson]
-{
-  location: {
-    address: "",
-    location: {
-      latitude: 0,
-      longitude: 0,
-    },
-    address_id: null,
-  },
-}
-\end{lstlisting}
-
-Die Validierung und Verwaltung der erhaltenen Daten erfolgt mittels \texttt{Zod} (siehe Abschnitt \ref{subsec:Zod}). Dies gewährleistet, dass die eingegebene Adresse den Mindestanforderungen entspricht und die Geodaten korrekt formatiert sind. Im folgenden Listing wird die Validierung mittels \texttt{Zod} veranschaulicht:
-
-\begin{lstlisting}[style=myjson]
-{
-  location: z.object({
-    address: z.string().min(2, {
-      message: "Please enter a valid address.",
-    }),
-    location: z.object({
-      latitude: z.number(),
-      longitude: z.number(),
-    }),
-    address_id: z.string().nullable(),
-  }),
-}
-\end{lstlisting}
-
-Die Entscheidung, die Autovervollständigung über das genannte Package zu realisieren, ergab sich aus der besseren Integration und Einfachheit im Vergleich zur direkten Nutzung der Places API von Google. Zwar stellt Google ein eigenes Component zur Verfügung, jedoch entsprach dessen optische Gestaltung nicht den Vorgaben des ShadCN-Designs, welches in der Website Anwendung findet. Die gewählte Lösung ermöglicht somit eine einheitliche Benutzeroberfläche und erleichtert die Implementierung der gewünschten Funktionalität.
-
-
-\subsubsection{Departments}
-
-\subsubsection{Class}
-
-\subsubsection{Devices}
-
-\subsubsection{User}
-
-\subsection{Schools-Map}
-
-\subsubsection{Google API Maps}
-
-In
-
-\newpage
-
-\section{Dashboard}
 
 
 

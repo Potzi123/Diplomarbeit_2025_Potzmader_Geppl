@@ -6,30 +6,34 @@
 
 Für Das Bauen einer Website muss sich zuerst gefragt werden mit was man eigentlich eine Website baut. Dafür gibt es die Verschiedenste Möglichkeiten. In disen Fall wurde NextJS genommen da es eines der Meist benutzen Frameworks \cite{SurveyStackOverflow} für Javascript ist.
 
-\subsection{Frontend}
+\vspace{1cm}
+
+\textbf{Frontend}
+
 Der Großteil des Frontends wird zunächst in Obsidian mithilfe des Excalidraw-Plugins entworfen, um zu veranschaulichen, wie eine Seite aussehen könnte.
 
-\subsubsection{Dashboard}
+\newpage
+\subsection{Dashboard}
 
 Im Rahmen dieser Diplomarbeit wurde das Dashboard unter Berücksichtigung moderner Designansätze entwickelt. Es orientiert sich an dem Beispiel auf der Shadcn-Website \cite{ShadCNDashboard}, wobei die Gestaltung den spezifischen Anforderungen unseres Projekts angepasst wurde.
 
 \begin{figure}[!htb] 
 \centering 
-\includegraphics[width=1\textwidth]{files/Thomas/pics/Design-Grundlagen/Frontend/Dashboard/dashboard.png} 
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{Beispiel einer Admin-Tabelle} 
+\includegraphics[width=0.75\textwidth]{files/Thomas/pics/Design-Grundlagen/Frontend/Dashboard/dashboard.png} 
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{Shadcn Beispiel Dashboard} 
 \label{fig:gehaeuse_internet_bild} 
 \end{figure}
 
 \begin{figure}[!htb] 
 \centering 
-\includegraphics[width=1\textwidth]{files/Thomas/pics/Design-Grundlagen/Frontend/Dashboard/Dashboard-Draw.png} 
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{Shadcn Example Dashboard} 
+\includegraphics[width=0.7\textwidth]{files/Thomas/pics/Design-Grundlagen/Frontend/Dashboard/Dashboard-Draw.png} 
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{Umdesignte Dashboard} 
 \label{fig:gehaeuse_internet_bild} 
 \end{figure}
 
 \newpage
 
-\subsubsection{Administrationsseiten}
+\subsection{Administrationsseiten}
 \label{ref:Administrationsseiten}
 
 Für die Entwicklung der Administrationsseiten wurde ein Konzept erarbeitet, das eine strukturierte und benutzerfreundliche Verwaltung der unterschiedlichen Datensätze ermöglicht. Auf der linken Seite wird eine Tabelle angezeigt, in der alle relevanten Einträge übersichtlich dargestellt werden. Auf der rechten Seite befindet sich eine Komponente zur Erstellung neuer Datensätze, welche die jeweiligen Tabellen ergänzt. Das System umfasst dabei separate Tabellen für Schulen, Abteilungen, Klassen, Sensoren und Benutzer, um eine differenzierte und effiziente Datenverwaltung zu gewährleisten. Zusätzlich erfolgt auf der Schul-Administrationsseite eine Visualisierung der Schulstandorte mittels einer Kartenansicht, um die räumliche Verteilung der Schulen anschaulich darzustellen.
@@ -44,23 +48,22 @@ Für die Entwicklung der Administrationsseiten wurde ein Konzept erarbeitet, das
 
 \newpage
 
-\subsubsection{Seitenleiste}
+\subsection{Seitenleiste}
 
 Die Seitenleiste \cite{ShadCNSidebar} wurde aufgrund ihrer optimalen Form ausgewählt, um den Benutzeraccount übersichtlich darzustellen. Zudem ermöglicht sie es Administratoren, den aktuell ausgewählten Schulstandort zu wechseln, wodurch eine bessere Übersicht über die laufenden Prozesse erzielt wird. Unterhalb dieses Bereichs werden sämtliche Abteilungen mitsamt den zugehörigen Klassen und Sensoren angezeigt. Die Sichtbarkeit einzelner Abteilungen richtet sich nach der jeweiligen Benutzerrolle: Während Administratoren sowie Schulleiter (Direktoren) alle Abteilungen mit den entsprechenden Klassen und Geräten einsehen können, erhalten Lehrkräfte ausschließlich Zugriff auf die Abteilung, in der sie tätig sind, und Schülerinnen sowie Schüler sehen lediglich ihre eigene Klasse.
 
-\begin{sidewaysfigure}[!htb] 
-\centering 
-\includegraphics[width=0.15\textwidth]{files/Thomas/pics/Design-Grundlagen/Frontend/Sidebar/sidebar.png} 
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{Beispiel einer Admin-Tabelle} 
-\label{fig:gehaeuse_internet_bild} 
-\end{sidewaysfigure}
 
-\clearpage
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=0.3\textwidth]{files/Thomas/pics/Design-Grundlagen/Frontend/Sidebar/sidebar.png}
+%\caption[Bildbezeichnung für Abbildungsverzeichnis]{Beispiel einer Admin-Tabelle}
+%\label{fig:gehaeuse_internet_bild}
+%\end{figure}
 
 \begin{figure}[!htb] 
 \centering 
-\includegraphics[width=1\textwidth]{files/Thomas/pics/Design-Grundlagen/Frontend/Sidebar/sidebar-adminvsnotadmin.png} 
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{Beispiel einer Admin-Tabelle} 
+\includegraphics[width=0.75\textwidth]{files/Thomas/pics/Design-Grundlagen/Frontend/Sidebar/sidebar-adminvsnotadmin.png} 
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{Seitenleiste Design Vergleich} 
 \label{fig:gehaeuse_internet_bild} 
 \end{figure}
 
@@ -69,8 +72,8 @@ Wird ein Sensor ausgewählt, gelangt der Benutzer auf das zugehörige Dashboard,
 
 \begin{figure}[!htb] 
 \centering 
-\includegraphics[width=1\textwidth]{files/Thomas/pics/Design-Grundlagen/Frontend/Sidebar/sidebar-nav-user-adminvsnotadmin.png} 
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{Beispiel der Seitenleiste} 
+\includegraphics[width=0.7\textwidth]{files/Thomas/pics/Design-Grundlagen/Frontend/Sidebar/sidebar-nav-user-adminvsnotadmin.png} 
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{Benutzer Navigations Vergleich} 
 \label{fig:gehaeuse_internet_bild} 
 \end{figure}
 
@@ -122,6 +125,8 @@ Im Folgenden wird das Design des Backends erläutert. Das System ist in der Lage
 }
 \end{lstlisting}
 
+\vspace{3cm}
+
 Zur eindeutigen Identifizierung der einzelnen Sensoren wird beim Anlegen eines Sensors auf der Administrationsseite stets eine Sensor-ID generiert. Diese dient als einzigartiger Identifikator, der es ermöglicht, die Messdaten den entsprechenden Sensoren zuzuordnen. Dementsprechend wird die Sensor-ID in den JSON-Daten mitübertragen:
 
 \begin{lstlisting}[style=myjson]
@@ -134,6 +139,8 @@ Zur eindeutigen Identifizierung der einzelnen Sensoren wird beim Anlegen eines S
     "gasres": 9
 }
 \end{lstlisting}
+
+\newpage
 
 Ein Problem tritt auf, wenn mehrere Messdaten gleichzeitig versendet werden sollen, da mehr Messpunkte erfasst werden, als in einer einzelnen Übertragung enthalten sein können. Zur Lösung dieses Problems wurde ein erweitertes JSON-Format entwickelt, das die Übermittlung mehrerer Messdatensätze in einer einzigen Nachricht ermöglicht:
 
@@ -168,25 +175,30 @@ Ein Problem tritt auf, wenn mehrere Messdaten gleichzeitig versendet werden soll
 
 Mit diesem erweiterten Datenformat ist das Backend in der Lage, die empfangenen Messdaten effizient in der Datenbank zu speichern.
 
+\newpage
+
+
 \section{Datenbank}
 
 Bei der Planung der Datenbankstruktur wurde zunächst festgestellt, dass Supabase zwar über die integrierte Authentifizierungstabelle theoretisch benutzerspezifische Daten abspeichern könnte, dies jedoch nicht vorgesehen ist. Aus diesem Grund wurde entschieden, eine eigene Tabelle für Benutzer anzulegen.
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[scale=0.45]{files/Thomas/pics/Datenbank_Design/profiles.png}
-  \caption[Bildbezeichnung für Abbildungsverzeichnis]{Your caption text here.}
-  \label{fig:gehaeuse_internet_bild}
+  \includegraphics[scale=0.5]{files/Thomas/pics/Datenbank_Design/profiles.png}
+  \caption[Benutzertabelle der Datenbank]{Tabelle zur Speicherung der Benutzerdaten}
+  \label{fig:profiles_tabelle}
 \end{figure}
 
 Im nächsten Schritt musste eine sinnvolle Struktur für die Verwaltung der Sensoren entworfen werden. Da das System nicht ausschließlich für die HTL St. Pölten vorgesehen ist, sondern auch von anderen Bildungseinrichtungen genutzt werden könnte, wurde die Datenbank entsprechend erweitert. Es wurde eine Tabelle \textit{Schools} erstellt, um mehrere Schulen abbilden zu können.
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[scale=0.45]{files/Thomas/pics/Datenbank_Design/school.png}
-  \caption[Bildbezeichnung für Abbildungsverzeichnis]{Your caption text here.}
-  \label{fig:gehaeuse_internet_bild}
+  \includegraphics[scale=0.5]{files/Thomas/pics/Datenbank_Design/school.png}
+  \caption[Schultabelle der Datenbank]{Schultabelle}
+  \label{fig:schools_tabelle}
 \end{figure}
+
+\newpage
 
 Da eine Schule in verschiedene Abteilungen untergliedert ist, wurden zusätzlich die Tabellen \textit{Departments} (Abteilungen) sowie \textit{Classes} (Klassen) angelegt. Diese Struktur ermöglicht eine klare Zuordnung und Verwaltung der Sensoren auf Klassen- bzw. Abteilungsebene innerhalb der jeweiligen Schule.
 
@@ -194,19 +206,19 @@ Da eine Schule in verschiedene Abteilungen untergliedert ist, wurden zusätzlich
   \centering
   \begin{subfigure}[b]{0.45\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{files/Thomas/pics/Datenbank_Design/departments.png}
-    \caption{Caption for first image.}
-    \label{fig:school1}
+    \includegraphics[scale=0.45]{files/Thomas/pics/Datenbank_Design/departments.png}
+    \caption[Tabelle Departments]{Abteilungenstabelle}
+    \label{fig:departments_tabelle}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.45\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{files/Thomas/pics/Datenbank_Design/classes.png}
-    \caption{Caption for second image.}
-    \label{fig:school2}
+    \includegraphics[scale=0.45]{files/Thomas/pics/Datenbank_Design/classes.png}
+    \caption[Tabelle Classes]{Klassentabelle}
+    \label{fig:classes_tabelle}
   \end{subfigure}
-  \caption[Bildbezeichnung für Abbildungsverzeichnis]{Your caption text here.}
-  \label{fig:gehaeuse_internet_bild}
+  \caption[Abteilungs- und Klassentabellen]{Datenbankstruktur von Klassen und Abteilungen}
+  \label{fig:departments_classes}
 \end{figure}
 
 Für die eigentlichen Sensordaten wurden zwei weitere Tabellen erstellt: \textit{Sensors} und \textit{Sensor\_Readings}. Die Trennung dieser Informationen ist notwendig, da bei einer Speicherung der Messwerte direkt in der \textit{Sensors}-Tabelle lediglich die aktuellen Werte abrufbar wären. Da jedoch geplant ist, die historischen Messwerte in Form von Zeitdiagrammen darzustellen, müssen diese dauerhaft gespeichert werden. Aus diesem Grund enthält die Tabelle \textit{Sensor\_Readings} zeitlich zuordenbare Einzelmessungen, welche sich eindeutig einem Sensor zuordnen lassen.
@@ -215,34 +227,31 @@ Für die eigentlichen Sensordaten wurden zwei weitere Tabellen erstellt: \textit
   \centering
   \begin{subfigure}[b]{0.45\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{files/Thomas/pics/Datenbank_Design/sensors.png}
-    \caption{Caption for first image.}
-    \label{fig:school1}
+    \includegraphics[scale=0.45]{files/Thomas/pics/Datenbank_Design/sensors.png}
+    \caption[Tabelle Sensors]{Sensorentabelle}
+    \label{fig:sensors_tabelle}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.45\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{files/Thomas/pics/Datenbank_Design/sensor_readings.png}
-    \caption{Caption for second image.}
-    \label{fig:school2}
+    \includegraphics[scale=0.45]{files/Thomas/pics/Datenbank_Design/sensor_readings.png}
+    \caption[Tabelle Sensor Readings]{Messwerttabelle}
+    \label{fig:sensor_readings_tabelle}
   \end{subfigure}
-  \caption[Bildbezeichnung für Abbildungsverzeichnis]{Your caption text here.}
-  \label{fig:gehaeuse_internet_bild}
+  \caption[Sensor- und Messwerttabellen]{Datenbankstruktur von Sensoren und Messwerten}
+  \label{fig:sensors_sensor_readings}
 \end{figure}
 
-
 \newpage
-
 
 \begin{sidewaysfigure}[!htb]
   \centering
   \includegraphics[scale=0.45]{files/Thomas/pics/output.png}
-  \caption[Bildbezeichnung für Abbildungsverzeichnis]{Your caption text here.}
-  \label{fig:gehaeuse_internet_bild}
+  \caption[Gesamtübersicht der Datenbankstruktur]{Gesamtdiagramm der Datenbankstruktur mit allen relevanten Tabellen und Verknüpfungen.}
+  \label{fig:db_gesamt}
 \end{sidewaysfigure}
 
-\clearpage  % <-- Forces LaTeX to place the figure here
-
+\clearpage
 \newpage
 
 \section{Gehäuse}

@@ -73,6 +73,8 @@
 
 \usepackage{subcaption}
 
+\usepackage{enumitem}
+
 
 
 % ???
@@ -280,7 +282,7 @@
 %%======================================================%%
 
 %% dokumentation (deutsch/englisch) ====================%%
-%%\includepdf[pages=-]{doc/pdfs/dokumentation-de.pdf}                 %Dokumentation(PDF) einfügen
+\includepdf[pages=1-4]{doc/pdfs/E_DiplArbeit_Seite_4_5.pdf}                 %Dokumentation(PDF) einfügen
 %%\includepdf[pages=-]{doc/pdfs/dokumentation-en.pdf}                 %Dokumentation(PDF) einfügen
 %%======================================================%%
 
@@ -301,7 +303,7 @@
 \include{files/Beginn/Danksagung}                             
 %%======================================================%%
 
-%%\cleardoublepage                                              %Seite freilassen
+\cleardoublepage                                              %Seite freilassen
 
 %% inhaltsverzeichnis ==================================%%
 \renewcommand*\chapterpagestyle{scrheadings}
@@ -341,14 +343,13 @@
 \responsible{Tobias Geppl} 
 \include{files/Tobias/uC-Programmierung}                                      
 
-
-%Chapter 7 Website
-\responsible{Thomas Potzmader} 
-\include{files/Thomas/Website}     
-
-%Chapter 8 Datenbank
+%Chapter 7 Datenbank
 \responsible{Thomas Potzmader} 
 \include{files/Thomas/Datenbank}
+
+%Chapter 8 Website
+\responsible{Thomas Potzmader} 
+\include{files/Thomas/Website}     
 
 %Chapter 9 Gehäuse
 \responsible{Thomas Potzmader} 

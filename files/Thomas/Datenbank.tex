@@ -1,17 +1,14 @@
 \begin{inhalt}
 \renewcommand*\chapterpagestyle{scrheadings}
-\chapter{Supabase}
-
-\section{Datenbank}
+\chapter{Datenbank}
 
 In diesem Abschnitt werden die Struktur, verwendete Tabellen sowie die wichtigen SQL-Befehle, Trigger und Funktionen der Datenbank detailliert erläutert.
 
-
-\subsection{Tabellen}
+\section{Tabellen}
 
 Die Datenbank besteht aus den folgenden Tabellen:
 
-\subsubsection{Schule (Schools)}
+\subsection{Schule (Schools)}
 Die Tabelle speichert Informationen zu den Schulen, einschließlich Standort und Webseite. Der Primärschlüssel (\texttt{id}) wird automatisch generiert.
 
 \begin{lstlisting}[style=mysql]
@@ -24,7 +21,7 @@ CREATE TABLE schools (
 );
 \end{lstlisting}
 
-\subsubsection{Abteilungen (Departments)}
+\subsection{Abteilungen (Departments)}
 Die Tabelle verwaltet die verschiedenen Abteilungen innerhalb einer Schule. Jede Abteilung ist eindeutig einer Schule zugeordnet.
 
 \begin{lstlisting}[style=mysql]
@@ -36,7 +33,7 @@ CREATE TABLE departments (
 );
 \end{lstlisting}
 
-\subsubsection{Klassen (Classes)}
+\subsection{Klassen (Classes)}
 Diese Tabelle speichert Informationen zu den Klassen, die spezifischen Abteilungen angehören.
 
 \begin{lstlisting}[style=mysql]
@@ -48,7 +45,7 @@ CREATE TABLE classes (
 );
 \end{lstlisting}
 
-\subsubsection{Geräte (Sensors)}
+\subsection{Geräte (Sensors)}
 Die Tabelle enthält Informationen zu den einzelnen Sensor-Geräten, welche jeweils einer Klasse  ist.
 
 \begin{lstlisting}[style=mysql]
@@ -59,7 +56,7 @@ CREATE TABLE sensors (
 );
 \end{lstlisting}
 
-\subsubsection{Benutzerprofile (Profiles)}
+\subsection{Benutzerprofile (Profiles)}
 In dieser Tabelle werden Benutzerdaten, Rollen und deren Zugehörigkeit zu Klassen verwaltet. Zudem sind hier Statusinformationen wie \texttt{approved} und \texttt{email\_confirmed\_at} gespeichert.
 
 \begin{lstlisting}[style=mysql]
@@ -78,7 +75,9 @@ CREATE TABLE profiles (
 
 \subsection{Trigger und Funktionen}
 
-\subsubsection{handle\_new\_user}
+\textbf{handle\_new\_user}
+
+
 Diese Funktion erstellt automatisch ein Benutzerprofil, sobald ein neuer Benutzer angelegt wird. Dies erleichtert die Verwaltung von Nutzerdaten.
 
 \begin{lstlisting}[style=mysql]
@@ -96,9 +95,9 @@ end;
 $function$;
 \end{lstlisting}
 
-Der Einsatz dieser Funktion erfolgt typischerweise über einen Trigger auf der Tabelle \texttt{auth.users}, um neue Benutzer automatisiert zu integrieren.
+\vspace{0.75cm}
 
-\subsubsection{handle\_updated\_email\_confirmed\_at}
+\textbf{handle\_updated\_email\_confirmed\_at}
 Diese Funktion aktualisiert das Feld \texttt{email\_confirmed\_at} im Profil eines Benutzers, wenn die E-Mail-Adresse bestätigt wird. Dies gewährleistet die Synchronität zwischen Authentifizierungs- und Profiltabellen.
 
 \begin{lstlisting}[style=mysql]
@@ -121,12 +120,50 @@ $function$;
 
 Die Implementierung dieser Funktion erfolgt ebenfalls durch einen Trigger, welcher Änderungen in der Tabelle \texttt{auth.users} überwacht.
 
-Durch diese Trigger und Funktionen wird eine automatische, zuverlässige und konsistente Pflege der Benutzerdaten in der Datenbank gewährleistet.
-
+\newpage
 
 \section{Storage}
 
+Für die Avatar-Bilder wurde die \texttt{Storage}-Funktion von Supabase verwendet, um Bilder einfach abrufen und hochladen zu können.  
+Hierfür wurde ein Bucket (oberster Ordner bzw. Container) mit dem Namen \texttt{Avatar} erstellt.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.55\textwidth]{files/Thomas/pics/Datenbank/storage/supabase_bucket_create.png}
+\caption[Erstellen eines Buckets in Supabase]{Erstellen eines Buckets in Supabase}
+\label{fig:supabase_bucket_create}
+\end{figure}
+
+Wie in Abbildung \ref{fig:supabase_bucket_create} zu sehen ist, wurde der Bucket so konfiguriert, dass nur Bilder mit einer maximalen Dateigröße von 5\,MB und ausschließlich Dateien im \texttt{image}- oder \texttt{gif}-Format hochgeladen werden dürfen.
+
+Die Dateistruktur des Buckets ist wie folgt aufgebaut:
+
+\begin{lstlisting}[style=mysql]
+avatar/
+ └── [user-id]/
+      └── avatar.png
+\end{lstlisting}
+
+Somit kann jedem Benutzer ein individuelles Profilbild zugewiesen werden.
+
+\newpage
+
 \section{Auth}
+
+Für die Authentifizierung wurde festgelegt, dass sich Benutzer mittels E-Mail und Passwort anmelden müssen.  
+Bevor sich ein Benutzer jedoch anmelden darf, muss er zunächst seine E-Mail-Adresse verifizieren.  
+Diese Funktion kann in den Supabase-Einstellungen aktiviert werden.  
+Sobald ein Benutzer sich registriert, sendet Supabase automatisch eine Verifizierungs-E-Mail.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.75\textwidth]{files/Thomas/pics/Datenbank/auth/signup-email.png}
+\caption[Supabase E-Mail-Verifizierung]{E-Mail-Verifizierung bei Supabase}
+\label{fig:supabase_signup_email}
+\end{figure}
+
+Der Benutzer muss anschließend nur noch den Verifizierungslink in der E-Mail anklicken, um seine E-Mail-Adresse erfolgreich zu bestätigen.
+
 
 
 

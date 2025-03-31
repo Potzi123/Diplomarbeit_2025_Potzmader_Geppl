@@ -3,6 +3,26 @@
 
 \section{Parameter}
 
+Anhand von Online-Recherche \cite{Luftparameter1, Luftparameter2} wurden folgende Parameter für die Luftqualitätsmessung festgelegt:
+
+\begin{itemize}
+    \item \textbf{Temperatur}
+    \item \textbf{Luftfeuchtigkeit}
+    \item \textbf{CO$_2$}
+    \item \textbf{VOC}
+\end{itemize}
+
+CO$_2$ und VOCs, sind in Innenräumen die relevantesten Schadstoffe. 
+
+\smallskip
+
+Kohlenstoffdioxid oder Kohlendioxid (CO$_2$) ist eine chemische Verbindung aus Kohlenstoff und Sauerstoff. CO$_2$ ist ein nicht brennbares, saures und farbloses Gas. Es entsteht unter anderem durch Verbrennung oder durch Ausatmung. \cite{CO2Wiki}
+
+\smallskip
+
+Luftschadstoffe werden kurz als VOC bezeichnet. Die Abkürzung VOC (Volatile Organic Compounds) steht für flüchtige organische Verbindungen. Es handelt sich dabei um organisch-chemische Verbindungen des Siedebereiches von ca. 50 – 260°C. VOC sind praktisch jederzeit und überall in der Raumluft enthalten. \cite{Luftparameter1}
+
+
 \section{Komponenten}
 
 \subsection{Mikrocontroller}
@@ -15,16 +35,16 @@ Da in dieser Diplomarbeit darauf geachtet wurde, hauptsächlich Komponenten mit 
 
 \smallskip
 
-Der PASCO2V01 ist ein CO$_2$-Sensor der Marke Infineon. Der Sensor misst den CO$_2$-Anteil in der Luft in PPM (Parts Per Million). Er benötigt 3,3V sowie 12V als Spannungsversorgungen und kann unter anderem mit I2C angesteuert und ausgelesen werden. \cite{PASCO2V01}
+Der PASCO2V01 ist ein CO$_2$-Sensor der Marke Infineon (Österreich). Der Sensor misst den CO$_2$-Anteil in der Luft in PPM (Parts Per Million). Er benötigt 3,3V sowie 12V als Spannungsversorgungen und kann unter anderem mit I2C angesteuert und ausgelesen werden. \cite{PASCO2V01}
 
 Benutzt wird das Mini Evaluation Board für den XENSIV™ PAS CO2-Sensor \cite{PASCO2_Miniboard}, da es bereits integrierte Pins besitzt und deshalb kein feines SMD-Löten erforderlich ist. 
 \bigskip \\
 
-\textbf{BME688:}
+\textbf{Gas-Sensor:}
 
 \smallskip
 
-Der BME688 ist ein Luftqualitätssensor der Marke Bosch \cite{BME688}. Er wird mittels I2C angesteuert bzw. ausgelesen. Der BME688 misst Temperatur in °C, relative Luftfeuchtigkeit in Prozent, Luftdruck in hPa und Gaswiderstand in Ohm. Der Gassensor des BME688 wurde laut Datenblatt auf folgende Gase charakterisiert:
+Der BME688 ist ein Luftqualitätssensor der Marke Bosch (Deutschland) \cite{BME688}. Er wird mittels I2C angesteuert bzw. ausgelesen. Der BME688 misst Temperatur in °C, relative Luftfeuchtigkeit in Prozent, Luftdruck in hPa und Gaswiderstand in Ohm. Der Gassensor des BME688 wurde laut Datenblatt auf folgende Gase charakterisiert:
 
 \begin{itemize}
     \item Wasserstoffsulfid (H₂S) 
@@ -36,7 +56,7 @@ Der BME688 ist ein Luftqualitätssensor der Marke Bosch \cite{BME688}. Er wird m
 Der Gassensor misst keine einzelnen Gaskonzentrationen, sondern ermittelt einen Gaswiderstandswert. Mit diesem kann die Qualität der Luft eingeschätzt werden. \cite{BME688}
 \smallskip
 
-Benutzt wird der Environment 3 Click der Marke MIKROE \cite{ENVIRONMENT_3_CLICK}. Dieser basiert auf dem BME688 von Bosch und besitzt integrierte Pins sowie Auswahlmöglichkeiten für die Adresse und das Bussystem (Kap. \ref{sec:Pin_Zuordnungen}), direkt am Board.
+Benutzt wird der Environment 3 Click der Marke MIKROE (Serbien) \cite{ENVIRONMENT_3_CLICK}. Dieser basiert auf dem BME688 von Bosch und besitzt integrierte Pins sowie Auswahlmöglichkeiten für die Adresse und das Bussystem (Kap. \ref{sec:Pin_Zuordnungen}), direkt am Board.
 
 \subsection{Display}
 

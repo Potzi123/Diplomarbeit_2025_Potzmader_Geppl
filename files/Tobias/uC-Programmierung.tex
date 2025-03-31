@@ -382,20 +382,65 @@ Für die Verbindung mit dem WLAN, wird eine Bibliothek von Benedikt Walter einge
 
 Der Benutzer kann durch die zwei Taster mit dem Display-Interface interagieren. Die Taster haben dabei folgende Funktionen:
 
-\bigskip \\
-\noindent\textbf{Taster 1}
-\begin{itemize}
-    \item Short Press: Screen-Wechsel
-    \item Long Press: Button aktivieren (auf Screen 3)
-\end{itemize}
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|l|p{10cm}|}
+\hline
+\rowcolor{cyan!20}
+\textbf{Taster} & \textbf{Funktion} \\
+\hline
+Taster 1 & 
+Short Press: Screen-Wechsel \newline
+Long Press: Button aktivieren (auf Screen 3) \\
+\hline
+Taster 2 & 
+Short Press: Button wählen (auf Screen 3) \\
+\hline
+\end{tabular}
+\caption{Tasterbelegung}
+\label{tab:Taster-Funktionen}
+\end{table}
 
-\noindent\textbf{Taster 2}
-\begin{itemize}
-    \item Short Press: Button wählen (auf Screen 3)
-\end{itemize}
 
-Der Ablauf der Tasterabfrage im Programmcode, wird durch folgendes Ablaufdiagramm beschrieben: 
+Der Ablauf der Tasterabfrage in der Dauerschleife des Programmcodes, wird durch folgendes Ablaufdiagramm beschrieben: (KEY0 = Taster1; KEY1 = Taster 2)
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{files/Tobias/pics/Diagramme/Tasterabfrage1.png}
+\caption[Tasterabfrage-Ablaufdiagramm]{Tasterabfrage-Ablaufdiagramm}
+\label{fig:Tasterabfrage-Ablaufdiagramm}
+\end{figure}
+
+\textbf{1. Start und Display-Update:}
+
+Nach dem Start wird in jedem Schleifendurchlauf der LVGL-Task-Handler aufgerufen. Dieser sorgt dafür, dass das Display und die grafische Oberfläche korrekt aktualisiert werden.
+
+\textbf{2. Tasterabfrage:}
+
+Das Programm prüft den aktuellen Tasterstatus. Dabei wird zwischen den beiden Tasten KEY0 und KEY1 unterschieden.
+
+\textbf{3. Verhalten von KEY0:}
+
+Wenn KEY0 gedrückt wird, wird unterschieden, ob es sich um das erste Drücken handelt (KEY0\_pressed == 0).
+
+Beim ersten Drücken wird die aktuelle Zeit als Startzeit gespeichert, um einen Longpress zu erkennen.
+
+\textbf{4. Short-Press:}
+
+Wenn KEY0 vor Ablauf der Longpress-Zeit wieder losgelassen wird, führt das System einen Screen-Wechsel durch. Der Screen-Wechsel passiert also nur bei einem kurzen Tastendruck.
+
+\textbf{5. Long-Press:}
+
+Wird die Taste länger gehalten und die Longpress-Bedingung erfüllt (Zeit >= Longpress), wird der aktuell ausgewählte Button auf dem Display aktiviert (nur auf Screen 3).
+
+\textbf{6. Verhalten von KEY1:}
+
+KEY1 wirkt nur, wenn sich der Benutzer im Screen 3 befindet. Durch jeden Druck auf KEY1 wird zyklisch der aktuell ausgewählte Button weitergeschaltet.
+
+\textbf{7. Schleifenende:}
+
+Nach Verarbeitung aller Eingaben kehrt das Programm an den Anfang der Schleife zurück und beginnt von vorne.
 
 
 
