@@ -112,6 +112,7 @@ Wird ein Sensor ausgewählt, gelangt der Benutzer auf das zugehörige Dashboard,
 
 
 \subsection{Backend}
+\label{ref:backend_design}
 
 Im Folgenden wird das Design des Backends erläutert. Das System ist in der Lage, verschiedene Messwerte zu verarbeiten, darunter CO\textsubscript{2}-Konzentrationen, Feuchtigkeitswerte, Temperaturwerte, Gaswiderstandswerte sowie einen Zeitstempel. Diese Daten werden im JSON-Format vom Backend empfangen. Zur Sicherstellung einer einheitlichen Datenstruktur wurde das folgende JSON-Schema definiert:
 
@@ -180,6 +181,7 @@ Mit diesem erweiterten Datenformat ist das Backend in der Lage, die empfangenen 
 
 \section{Datenbank}
 
+\label{ref:profile-table-design}
 Bei der Planung der Datenbankstruktur wurde zunächst festgestellt, dass Supabase zwar über die integrierte Authentifizierungstabelle theoretisch benutzerspezifische Daten abspeichern könnte, dies jedoch nicht vorgesehen ist. Aus diesem Grund wurde entschieden, eine eigene Tabelle für Benutzer anzulegen.
 
 \begin{figure}[!htb]
@@ -258,7 +260,11 @@ Für die eigentlichen Sensordaten wurden zwei weitere Tabellen erstellt: \textit
 
 Zunächst wurde eine umfassende Recherche im Internet durchgeführt, um bestehende Designvarianten zu identifizieren. Dabei wurde ein Design entdeckt, das den Anforderungen entsprach \cite{TemuGehaeuseURL}(\ref{fig:gehaeuse_internet_bild}).
 
+\vspace{0.15cm}
+
 Um eine praktikable Lösung zu entwickeln, wurde ein alternativer Ansatz verfolgt: Es sollte ein Gehäuse konzipiert werden, das sich leicht auseinandernehmen lässt. Ergänzende Recherchen auf YouTube \cite{GehaeuseYoutubeClipsURL} ergaben, dass der Einsatz von Klammern als Verbindungselemente eine Möglichkeit darstellt, das Gehäuse sicher zusammenzuhalten und gleichzeitig eine einfache Demontage zu gewährleisten.
+
+\vspace{0.15cm}
 
 Diese Methode bietet den Vorteil, dass das Gehäuse nicht nur robust zusammengebaut ist, sondern auch bei Bedarf zügig geöffnet werden kann, um Wartungsarbeiten durchzuführen oder interne Komponenten auszutauschen.
 

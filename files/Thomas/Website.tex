@@ -2,6 +2,34 @@
 \renewcommand*\chapterpagestyle{scrheadings}
 \chapter{Website}
 
+Die Webseite wurde in \texttt{TypeScript} programmiert und verwendet \texttt{Next.js} als Framework.
+
+\vspace{0.15cm}
+
+Zum Starten des Projekts musste folgender Setup-Befehl ausgeführt werden:
+
+\begin{lstlisting}[style=myconsole]
+npx create-next-app@latest
+\end{lstlisting}
+
+Anschließend wurden die gewünschten Projekt-Einstellungen ausgewählt.  
+Für dieses Projekt wurden folgende Optionen festgelegt:
+
+\begin{lstlisting}[style=myconsole]
+√ What is your project named? ... classscout
+√ Would you like to use TypeScript? ... Yes
+√ Would you like to use ESLint? ... Yes
+√ Would you like to use Tailwind CSS? ... Yes
+√ Would you like your code inside a `src/` directory? ... No
+√ Would you like to use App Router? (recommended) ... Yes
+√ Would you like to use Turbopack for `next dev`? ... Yes
+√ Would you like to customize the import alias (`@/*` by default)? ... Yes
+√ What import alias would you like configured? ... @/*
+\end{lstlisting}
+
+
+
+\newpage
 
 \section{Signup}
 \label{ref:Signup}
@@ -148,20 +176,25 @@ Der wesentliche Unterschied zwischen dem \texttt{Login}-Formular und der \texttt
 />
 \end{lstlisting}
 
-\subsection{Funktionalitäten der AvatarUpload-Komponente}
+\newpage
 
-Die \texttt{AvatarUpload}-Komponente stellt ein zentrales Element der Benutzerprofilseite (\texttt{/setup-profile}) dar. Sie ermöglicht eine intuitive Verwaltung von Profilbildern und gewährleistet eine konsistente visuelle Darstellung im gesamten System. Die Komponente implementiert vier Kernfunktionalitäten:
+\subsection{AvatarUpload-Komponente}
 
-\vspace{1cm}
+Die \texttt{AvatarUpload}-Komponente stellt ein zentrales Element der Benutzerprofilseite (\texttt{/setup-profile}) dar. Sie ermöglicht eine intuitive Verwaltung von Profilbildern. Die Komponente implementiert vier Kernfunktionalitäten:
+
+\vspace{0.75cm}
 
 \textbf{Hochladen eines neuen Avatars mit Live-Vorschau}
-\vspace{0.1cm}
+
+\vspace{0.15cm}
+
 Die Komponente ermöglicht das Hochladen von Profilbildern mit sofortiger Vorschau. Der Prozess umfasst:
 \begin{itemize}
     \item Dateiauswahl aus dem lokalen Dateisystem
     \item Automatische Validierung (max. 5MB, nur Bildformate)
     \item Sofortige Vorschau ohne direkten Server-Upload
 \end{itemize}
+
 
 \begin{lstlisting}[style=mytsx, caption={Implementierung des Avatar-Uploads mit Validierung}, label={lst:avatar_upload}]
 const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -192,7 +225,8 @@ const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
 };
 \end{lstlisting}
 
-\subsubsection{Entfernen bestehender Avatare}
+\textbf{Entfernen bestehender Avatare}
+\vspace{0.15cm}
 Ein vorhandenes Profilbild kann über eine dedizierte Schaltfläche entfernt werden:
 \begin{itemize}
     \item Visuelles Feedback durch \texttt{X}-Symbol
@@ -286,14 +320,20 @@ Die \texttt{AvatarUpload}-Komponente vereint somit moderne Webtechnologien mit b
 \label{ref:middelware}
 
 Die Datei \texttt{middleware} ist ein zentraler Bestandteil der Anwendung und wird bei jedem Seitenaufruf ausgeführt.  
+\vspace{0.15cm}
+
 Sie übernimmt wichtige Aufgaben im Bereich Sicherheit, Weiterleitung und Zustandskontrolle der Anwendung.  
 
-%\begin{figure}[!htb]
-%\centering
-%\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/middleware/middleware.png}
-%\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
-%\label{fig:middleware}
-%\end{figure}
+\vspace{2cm}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/middelware/middelware.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{Flowchart von der Middelware}
+\label{fig:middleware}
+\end{figure}
+
+\newpage
 
 Die Middleware wird automatisch bei jedem Aufruf einer Seite ausgeführt, sofern der aufgerufene Pfad nicht explizit ausgeschlossen wurde.  
 Dadurch lassen sich serverseitige Logiken zentral abbilden, wie z.\,B. Authentifizierungsprüfungen, Weiterleitungen oder Cookie-Handling.
@@ -383,12 +423,14 @@ Die Seitenleiste ist für die Navigation zwischen den verschiedenen Klassen, Abt
 Der Aufbau der Seitenleiste besteht aus den folgenden Komponenten:
 
 \begin{itemize}
-    \item school-swticher
-    \item nav-departments-classes-devices
-    \item nav-user
+    \item school-swticher (SidebarHeader)
+    \item nav-departments-classes-devices (SidebarContent)
+    \item nav-user (SidebarFooter)
 \end{itemize}
 
 %%% Bild einfügen von der Struktur
+
+\vspace{2cm}
 
 \begin{figure}[!htb]
 \centering
@@ -423,11 +465,6 @@ Schüler, Lehrer und Direktoren besitzen hingegen keine Berechtigung, die Schule
 Die ausgewählte Schule wird anschließend in einem Cookie gespeichert, um beim nächsten Aufruf der Webseite automatisch wiederhergestellt zu werden.  
 Im folgenden Codebeispiel wird das Cookie clientseitig unter dem Namen \texttt{activeSchool} gesetzt und speichert die \texttt{UUID} der Schul-ID.
 
-Das Attribut \texttt{secure} sorgt dafür, dass das Cookie nur über HTTPS gesendet wird.  
-Da dies jedoch nur in der Produktionsumgebung erforderlich ist, wird die Einstellung über \texttt{process.env.NODE\_ENV} gesteuert.  
-Durch die Einstellung \texttt{sameSite = lax} wird das Cookie nur bei normaler Navigation und GET-Anfragen mitgesendet.  
-Der Parameter \texttt{path} legt fest, dass das Cookie auf der gesamten Webseite verfügbar ist.
-
 \begin{lstlisting}[language=TypeScript]
 Cookies.set('activeSchool', school.id, {
     secure: process.env.NODE_ENV === 'production',
@@ -435,6 +472,11 @@ Cookies.set('activeSchool', school.id, {
     path: '/',
 });
 \end{lstlisting}
+
+Das Attribut \texttt{secure} sorgt dafür, dass das Cookie nur über HTTPS gesendet wird.  
+Da dies jedoch nur in der Produktionsumgebung erforderlich ist, wird die Einstellung über \texttt{process.env.NODE\_ENV} gesteuert.  
+Durch die Einstellung \texttt{sameSite = lax} wird das Cookie nur bei normaler Navigation und GET-Anfragen mitgesendet.  
+Der Parameter \texttt{path} legt fest, dass das Cookie auf der gesamten Webseite verfügbar ist.
 
 
 %%% ADD School maby
@@ -461,7 +503,7 @@ Cookies.set('activeSchool', school.id, {
 
 Die Aufgabe der nav-departments-classes-devices Komponente ist das Man zwischen den Abteilungen Klassen und Sensoren umher Navigiren kann. Damit erkannt wird in welcher Schule man sich Befindet wurde eine Speziele URL Addresse entworden:
 
-\begin{lstlisting}[language=TypeScript]
+\begin{lstlisting}[language=mytsx]
 
 domainname/uuid-der-schule/dashboard?department=uuid-in dem-Department-man-gerae-ist&class=uuid-in-welcher-Klasse-man-sich-gerade befindet&device=device-uuid
 
@@ -484,9 +526,8 @@ Die nav-user Komponente ist im SidebarFooter(Am Boden der Seitenleiste). Sie ist
 \label{fig:gehaeuse_internet_bild}
 \end{figure}
 
-\clearpage
 
-Außerdem ist es auch noch da um Auf den Profil Editor des Bentuzers zu kommen. Wenn man ein Admin ist kann man auch auf die Administrator Seiten der Website kommen und es gibt noch eine Settings Seite und einen Logout Knopf um sich abzumelden. 
+Außerdem ist es auch noch da um Auf den Profil Editor des Benutzers zu kommen. Wenn man ein Admin ist kann man auch auf die Administrator Seiten der Website kommen und es gibt noch eine Settings Seite und einen Logout Knopf um sich abzumelden. 
 
 \begin{figure}[!htb]
 \centering
@@ -497,9 +538,9 @@ Außerdem ist es auch noch da um Auf den Profil Editor des Bentuzers zu kommen. 
 
 
 
-Beim Abmelden von der Seite wird als erstes  gewarted bis die signOut funktion ein success zurück bekommt danach wird der user auf die Lgin seite weitergeleitet. 
+Beim Abmelden von der Seite wird als erstes  gewarted bis die signOut funktion ein success zurück bekommt danach wird der user auf die Login seite weitergeleitet. 
 
-\begin{lstlisting}[language=TypeScript]
+\begin{lstlisting}[language=mytsx]
   const handleSignOut = async () => {
     const { success, error } = await signOut();
     if (success) {
@@ -523,14 +564,14 @@ Beim Abmelden von der Seite wird als erstes  gewarted bis die signOut funktion e
 \end{figure}
 
 
-Die Settings(Einstellungs Seite hat nur eine Aufgabe und zward den Theme zu wechseln dieser wird dann wieder in den Cookies gespeichet mit den Namen theme um bei einen Refresh nicht den Theme zu verlieren.
+Die Settings(Einstellungs Seite hat nur eine Aufgabe und zwar den Theme zu wechseln dieser wird dann wieder in den Cookies gespeichet mit den Namen theme um bei einen Refresh nicht den Theme zu verlieren.
 
 \vspace{2cm}
 
-In diesn Code wird ein Schalter eingesetzt um in den Dunklen Modus oder den Hellen Modus zu wechseln. Dieser Switch hat die id dark-mode und eine Variable die den Wert des Schalters annimt am Schluss wird jedes mal wenn der Schalter geschalten wird wird die Funktion "toggelTheme" aufgerufen um die Cookies und den Theme der Seite zu verändern.
+In diesem Code wird ein Schalter eingesetzt, um zwischen dem Dunklen Modus und dem Hellen Modus zu wechseln. Dieser Switch hat die ID \texttt{dark-mode} und eine Variable, die den Wert des Schalters annimmt. Am Schluss wird jedes Mal, wenn der Schalter betätigt wird, die Funktion \texttt{toggleTheme()} aufgerufen, um die Cookies zu setzen und das Theme der Seite zu verändern.
 
 
-\begin{lstlisting}[language=TypeScript]
+\begin{lstlisting}[language=mytsx]
 <Switch
     id="dark-mode"
     checked={isDarkMode}
@@ -570,22 +611,312 @@ Das Admin Dashboard ist dafür da um alle User, Geräte, Klassen, Abteilungen un
 
 In dem Bild kann man sehen wie das Dashboard der Sensoren ausschaut.
 
-\subsection{Tabele}
+\subsection{Table}
 
 Jeder Table hat außer die User Table die ist speziel hat am anfag die uuid von den Strukturelementen. Diese Last sich immer ganz einfach kopiern durch einen Button. Danach wird der Name angezeigt und nachdem wird der Zeitpunkt der Erstellung des Strukturelementes angeziegt und am schluss eine Möglichkeit diese Strukturelemente zu löschen. 
 
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/admin/sensors/sensor-table.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\label{fig:gehaeuse_internet_bild}
+\end{figure}
 
+Zum Kopieren des Textes wird der Inhalt zunächst in die Zwischenablage (\texttt{clipboard}) gespeichert mit der funktion \texttt{navigator.clipboard.writeText(value)}. 
+Anschließend wird die Variable \texttt{isCopied} auf \texttt{true} gesetzt, wodurch das anzuzeigende Icon entsprechend geändert wird.  
+Nach zwei Sekunden wird die Variable wieder auf \texttt{false} zurückgesetzt, um das Icon erneut zu aktualisieren.
+
+
+\begin{lstlisting}[language=mytsx]
+const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(value);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy text: ", err);
+    }
+  };
+\end{lstlisting}
 %%% code hinzufügen 
 
-\subsubsection{School Table}
-
-google
-
-
+\clearpage
 
 \subsection{Erstellen}
 
-Beim Erstellen muss sich 
+Beim Erstellen von den Verschieden Strukturelementen wurde eine immer die Selbe Struktur genommen. Oben Wird immer der Name eingegeben danch kommen die abhängigen slektoren.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.8\textwidth]{files/Thomas/pics/Website/admin/sensors/sensor-create.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\label{fig:sensor-create}
+\end{figure}
+
+Bei den Beispiel für die Sensor-Erstellungs Komponente \ref{fig:sensor-create} kann man sehen das diese die Schule, Abeteilung und die Klasse benötigt da sie von diesen Parametern abhängig ist.
+
+\newpage
+
+\textbf{Schule automatische Vervollständigung}
+
+Für das Erstellen von Schulen wurde eine Auto Vervollständigung von Google bentutz um leichter den Standort der Schulen einzugeben.
+
+\textbf{Validierung der Autocomplete-Eingabe}
+
+In diesem Code-Snippet wird geprüft, ob der eingegebene Text mindestens 3 Zeichen lang ist und der \texttt{autocompleteService} verfügbar ist. Wenn dies der Fall ist, werden über die Google Places API passende Vorschläge abgefragt.
+
+\begin{itemize}
+    \item Falls Ergebnisse gefunden wurden, werden diese in den State \texttt{predictions} geladen.
+    \item Falls keine Ergebnisse vorhanden sind (\texttt{ZERO\_RESULTS}), wird eine leere Liste angezeigt und eine Fehlermeldung gesetzt.
+    \item Bei allen anderen Fehlern wird ebenfalls eine leere Liste angezeigt und eine allgemeine Fehlermeldung angezeigt.
+    \item Nach der Verarbeitung wird der Ladezustand auf \texttt{false} gesetzt.
+\end{itemize}
+
+\vspace{0.5cm}
+
+\begin{lstlisting}[language=mytsx]
+if (inputValue.length > 2 && autocompleteService.current) {
+    autocompleteService.current.getPlacePredictions(
+        { input: inputValue },
+        (predictions, status) => {
+            if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions) {
+                setPredictions(predictions);
+            } else if (status === window.google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
+                setPredictions([]);
+                setError("No results found");
+            } else {
+                setPredictions([]);
+                setError("Error fetching predictions");
+            }
+            setLoading(false);
+        },
+    );
+} else {
+    setPredictions([]);
+    setLoading(false);
+}
+\end{lstlisting}
+
+\clearpage
+
+\subsection{Schule Map}
+
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.8\textwidth]{files/Thomas/pics/Website/admin/school/school-map.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{Google Maps Karte auf der Webseite}
+\label{fig:gehaeuse_internet_bild}
+\end{figure}
+
+Die Schule Map ist eine Google Maps karte den Standort
+der Schulen anzeigen kann.
+
+\vspace{1cm}
+
+
+In diesen Komponent wurde die Map von react-google-maps/api genommen diese erlaubt für viele Eisntellungen aber sie ist auch leicht tu implementiren
+
+\vspace{0.15cm}
+
+In diesen code wird die Map Eingetsellt der Standard Ort wo die Map reingezoomed ist in St Pölten
+Außerdem wruden viele Controle Eisntellungen auf falsch gesstellt da der User nur die Map zum Zoomen benutzen soll und zu schauen wo Schulen sind.
+
+
+\begin{lstlisting}[language=mytsx]
+<GoogleMap
+        mapContainerStyle={containerStyle}
+        center={defaultCenter}
+        zoom={defaultZoom}
+        options={{
+          disableDefaultUI: false,
+          zoomControl: true,
+          mapTypeControl: false,
+          streetViewControl: false,
+          fullscreenControl: false,
+        }}
+      >
+\end{lstlisting}
+
+
+
+
+
+\clearpage
+
+\section{Dashbaord}
+
+Das Dashboard ist der Kern punkt dieser Diplomarbeit den dies Zeigt an welche werte der Sensor gemessen hat.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/dashbord/dashbaord-screen.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{Dashbaord}
+\label{fig:gehaeuse_internet_bild}
+\end{figure}
+
+\subsection{DatePicke}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/dashbord/dashbaord-datepicker.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{flowchart of datepicker}
+\label{fig:gehaeuse_internet_bild}
+\end{figure}
+
+
+Für das auswählen das man in einen gewissen Zeitraum die Daten auswählen kann wurde ein DatePicker Komponente erstellt die einen gewissen zeitraum einstellen kann
+
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/dashbord/dashbaord-datepicker-flowchart.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{flowchart of datepicker}
+\label{fig:gehaeuse_internet_bild}
+\end{figure}
+
+
+\clearpage
+
+\subsection{Diagramm}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/dashbord/chart.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{Diagramm Dashboard}
+\label{fig:Flowchart_Backend}
+\end{figure}
+
+Das Diagramm wrude mit den Diagrammen von Shadcn gemacht. Die Werte die angezeigt werden sollten sind.
+
+\begin{itemize}
+    \item Temperature
+
+    \item Humidity
+
+    \item CO2
+
+    \item Gas Resistance
+\end{itemize}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/dashbord/dashbaord-datepicker-flowchart.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{flowchart of chart}
+\label{fig:gehaeuse_internet_bild}
+\end{figure}
+
+Da nicht jederzeit alle Werte gleichzeitig angezeigt werden sollen, wurde eine Lösung mit Schaltflächen implementiert, um einzelne Linien flexibel ein- oder auszublenden.
+Mithilfe von \texttt{zustand} wird im folgenden Code-Snippet im State gespeichert, welche Linien aktuell sichtbar sind.
+
+Zunächst wird geprüft, ob die Schaltfläche \texttt{"all"} gedrückt wurde. In diesem Fall werden entweder alle vier Linien gleichzeitig ein- oder ausgeblendet, je nachdem, ob aktuell bereits alle sichtbar sind.
+Wird hingegen eine einzelne Linie ein- oder ausgeblendet, so wird ihr Name entweder aus dem \texttt{activeLines}-Array entfernt oder wieder hinzugefügt.
+
+\begin{lstlisting}[language=mytsx]
+toggleLine: (line) => {
+    const { activeLines } = get();
+    
+    if (line === "all") {
+      // Alle Linien ein-/ausblenden
+      if (activeLines.length === 4) {
+        set({ activeLines: [] });
+      } else {
+        set({ activeLines: ["temperature", "humidity", "co2", "gas_resistance"] });
+      }
+    } else {
+      // Einzelne Linie ein-/ausblenden
+      if (activeLines.includes(line)) {
+        set({ activeLines: activeLines.filter(l => l !== line) });
+      } else {
+        set({ activeLines: [...activeLines, line] });
+      }
+    }
+  },
+\end{lstlisting}
+
+
+
+
+
+
+
+\subsection{Realtime}
+\label{ref:realtime-sensor}
+
+Im folgenden Code-Snippet wird eine Realtime-Subscription für einen Sensor eingerichtet.  
+Dabei wird ein Channel auf der Tabelle \texttt{sensor\_readings} erstellt, der jedes Mal einen Callback auslöst, sobald sich über \texttt{postgres\_changes} eine Änderung für genau diesen Sensor ereignet.
+
+\begin{lstlisting}[language=mytsx]
+export async function subscribe_to_sensor_readings(
+  callback: (payload: RealtimePostgresChangesPayload<SensorReadingRow>) => void,
+  sensorId: string
+): Promise<RealtimeChannel> {
+  const supabase = await createClient();
+  const channel = supabase
+    .channel(`sensor-readings-${sensorId}`)
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'sensor_readings',
+        filter: `sensor_id=eq.${sensorId}`,
+      },
+      (payload) => callback(payload as RealtimePostgresChangesPayload<SensorReadingRow>)
+    )
+    .subscribe();
+  
+  return channel;
+}
+\end{lstlisting}
+
+
+\newpage
+
+
+\subsection{Cards}
+
+Auf dem Dashboard werden 4 Karten angezeit wo jede den aktulesten wert anzeigt der von dem Sensor gemessen wurde. Dies wurde auch mittels der gelichen Reatlime \ref{ref:realtime-sensor} implementiert.
+
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/dashbord/dashboard-card.png}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{flowchart of chart}
+\label{fig:gehaeuse_internet_bild}
+\end{figure}
+
+
+
+
+\newpage
+
+Im zweiten Code-Snippet wird der Channel mithilfe von \texttt{zustand} im State gespeichert.  
+Zusätzlich wird hier festgelegt, dass der Callback nur bei einem \texttt{INSERT} oder \texttt{UPDATE} ausgelöst wird.  
+Bei einer solchen Änderung wird ein neues Sensor-Reading zur State-Variable hinzugefügt.
+
+\begin{lstlisting}[language=mytsx]
+subscribeToReadings: async (sensorId) => {
+    try {
+      const channel = await subscribe_to_sensor_readings(
+        (payload) => {
+          console.log('Real-time sensor reading received:', payload);
+          
+          if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+            const newReading = payload.new as SensorReadingRow;
+            get().addReading(newReading);
+          }
+        },
+        sensorId
+      );
+      
+      set({ realtimeSubscriptions: { ...get().realtimeSubscriptions, readings: channel } });
+    } catch (error) {
+      console.error('Error setting up real-time subscription:', error);
+    }
+  },
+\end{lstlisting}
+
 
 
 
@@ -595,16 +926,45 @@ Beim Erstellen muss sich
 
 \section{Backend}
 
-
-
-
+Das Backend kann auf /api/sensor-data mittels einen Post request daten geschickt werden wie in \ref{ref:backend_design} beschreiben. Wie diese Daten verarbeitet werden kann man im flowchart \ref{fig:Flowchart_Backend} sehen.
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=1\textwidth]{files/Thomas/pics/Website/backend/image.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
-\label{fig:gehaeuse_internet_bild}
+\caption[Bildbezeichnung für Abbildungsverzeichnis]{Flowchart vom Backend}
+\label{fig:Flowchart_Backend}
 \end{figure}
+
+Durch diesen Abluaf wird sicher gestellt das die Daten Valide sind.
+
+\newpage
+
+In diesen Code Snipet wird geprüft ob der token(uuid des Sensors) Valide ist und wenn nicht wird ein error zurückgeschickt mit dem Statuts 401 und einen Text Unauthorized
+
+\begin{lstlisting}[language=mytsx]
+const isValidToken = await validate_sensor_token(token);
+        
+        if (!isValidToken) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+\end{lstlisting}
+
+\vspace{1cm}
+
+In diesen Code am schluss der route wird geprüft ob die sensor daten in die Datenbank gespeichert werden konnten. Wenn dies nicht der Fall ist wird ein Error zürckgeschickt mit dem Status 500 und der Nachricht Failed to save data
+
+
+\begin{lstlisting}[language=mytsx]
+const { success, error } = await insert_sensor_readings(validReadings);
+
+            if (!success) {
+                console.error('Error inserting data:', error);
+                return NextResponse.json({ error: 'Failed to save data' }, { status: 500 });
+            }
+\end{lstlisting}
+
+
+
 
 \clearpage
 
