@@ -1,6 +1,7 @@
 \begin{inhalt}
 \renewcommand*\chapterpagestyle{scrheadings}
 \chapter{Website}
+\label{ref:Website}
 
 Die Webseite wurde in \texttt{TypeScript} programmiert und verwendet \texttt{Next.js} als Framework.
 
@@ -40,7 +41,7 @@ Hierfür wurde eine Registrierkomponente erstellt, die den Registrier-Prozess er
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.5\textwidth]{files/Thomas/pics/Website/Signup/sign-up.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{Registrierkomponente}
+\caption[Registrierkomponente]{Registrierkomponente}
 \label{fig:gehaeuse_internet_bild}
 \end{figure}
 
@@ -123,7 +124,7 @@ Anschließend muss sich der Benutzer einloggen. Dieser Vorgang ist nahezu identi
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.5\textwidth]{files/Thomas/pics/Website/Login/login.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\caption[Loginkomponete]{Loginkomponete}
 \label{fig:gehaeuse_internet_bild}
 \end{figure}
 
@@ -147,6 +148,7 @@ export async function login_user(email: string, password: string) {
 \newpage
 
 \section{Setup Profile}
+\label{ref:profile-setup}
 
 Wenn ein Benutzer versucht, auf die \texttt{/setup-profile}-Seite zuzugreifen, und bereits angemeldet ist, wird überprüft, ob im Profil entweder der Benutzername, der Vorname oder der Nachname fehlt.  
 Falls einer dieser Werte nicht gesetzt ist, wird der Benutzer automatisch durch die Middleware (siehe \ref{ref:middelware}) auf die entsprechende Seite weitergeleitet.
@@ -158,7 +160,7 @@ Die \texttt{/setup-profile}-Seite dient dazu, sicherzustellen, dass jeder Benutz
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.55\textwidth]{files/Thomas/pics/Website/setup-profile/setup-profile.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\caption[Profil Erstellung und Vervollständigung Komponente]{Profil Erstellung und Vervollständigung Komponente}
 \label{fig:gehaeuse_internet_bild}
 \end{figure}
 
@@ -196,7 +198,7 @@ Die Komponente ermöglicht das Hochladen von Profilbildern mit sofortiger Vorsch
 \end{itemize}
 
 
-\begin{lstlisting}[style=mytsx, caption={Implementierung des Avatar-Uploads mit Validierung}, label={lst:avatar_upload}]
+\begin{lstlisting}[style=mytsx, label={lst:avatar_upload}]
 const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
   const file = event.target.files?.[0];
   if (!file || !validateFile(file)) return;
@@ -227,14 +229,14 @@ const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
 
 \textbf{Entfernen bestehender Avatare}
 \vspace{0.15cm}
-Ein vorhandenes Profilbild kann über eine dedizierte Schaltfläche entfernt werden:
+Ein vorhandenes Profilbild kann entfernt werden:
 \begin{itemize}
     \item Visuelles Feedback durch \texttt{X}-Symbol
     \item Sofortige Aktualisierung der Anzeige
     \item Markierung zur Löschung beim nächsten Speichervorgang
 \end{itemize}
 
-\begin{lstlisting}[style=mytsx, caption={Implementierung der Avatar-Löschung}, label={lst:avatar_delete}]
+\begin{lstlisting}[style=mytsx, label={lst:avatar_delete}]
 const handleRemoveAvatar = async () => {
   try {
     setState(prev => ({
@@ -256,7 +258,10 @@ const handleRemoveAvatar = async () => {
 };
 \end{lstlisting}
 
-\subsubsection{Intelligente Fallback-Darstellung}
+\textbf{Intelligente Fallback-Darstellung}
+
+\vspace{0.15cm}
+
 Bei fehlendem Profilbild generiert die Komponente automatisch einen visuellen Platzhalter:
 \begin{itemize}
     \item Extraktion der Benutzerinitialen aus dem Namen
@@ -264,7 +269,7 @@ Bei fehlendem Profilbild generiert die Komponente automatisch einen visuellen Pl
     \item Automatische Anpassung an verschiedene Namensformate
 \end{itemize}
 
-\begin{lstlisting}[style=mytsx, caption={Generierung der Fallback-Initialen}, label={lst:avatar_initials}]
+\begin{lstlisting}[style=mytsx, label={lst:avatar_initials}]
 const getInitials = (name: string): string => {
   if (!name) return "??";
   const parts = name.split(" ");
@@ -274,7 +279,10 @@ const getInitials = (name: string): string => {
 };
 \end{lstlisting}
 
-\subsubsection{Echtzeit-Synchronisation}
+\textbf{Echtzeit-Synchronisation}+
+
+\vspace{0.15cm}
+
 Die Komponente nutzt Supabase Realtime für die Live-Synchronisation:
 \begin{itemize}
     \item Automatische Aktualisierung bei externen Änderungen
@@ -282,7 +290,7 @@ Die Komponente nutzt Supabase Realtime für die Live-Synchronisation:
     \item Robuste Fehlerbehandlung
 \end{itemize}
 
-\begin{lstlisting}[style=mytsx, caption={Implementierung der Echtzeit-Synchronisation}, label={lst:avatar_subscription}]
+\begin{lstlisting}[style=mytsx, label={lst:avatar_subscription}]
 useEffect(() => {
   if (!userId) return;
   
@@ -329,7 +337,7 @@ Sie übernimmt wichtige Aufgaben im Bereich Sicherheit, Weiterleitung und Zustan
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=1\textwidth]{files/Thomas/pics/Website/middelware/middelware.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{Flowchart von der Middelware}
+\caption[Ablaufdiagramm von der Middelware]{Ablaufdiagramm von der Middelware}
 \label{fig:middleware}
 \end{figure}
 
@@ -345,7 +353,7 @@ Dadurch lassen sich serverseitige Logiken zentral abbilden, wie z.\,B. Authentif
   \begin{itemize}
     \item Überprüfung, ob ein Benutzer eingeloggt ist, mittels \texttt{supabase.auth.getUser()}
     \item Nicht eingeloggte Benutzer werden zur Login-Seite weitergeleitet
-    \item Eingeloggte Benutzer, die sich auf Auth-Seiten befinden (z.\,B. \texttt{/login}, \texttt{/signup}), werden automatisch zum Dashboard umgeleitet
+    \item Eingeloggte Benutzer werden automatisch zum Dashboard umgeleitet
   \end{itemize}
 
   \item \textbf{Profilüberprüfung}
@@ -362,7 +370,6 @@ Dadurch lassen sich serverseitige Logiken zentral abbilden, wie z.\,B. Authentif
 
   \item \textbf{Cookie-Management}
   \begin{itemize}
-    \item Es werden Standard-Cookies wie \texttt{theme} und \texttt{activeSchool} gesetzt
     \item Die Authentifizierung erfolgt mithilfe des Supabase-Cookie-Managements
   \end{itemize}
 
@@ -428,14 +435,10 @@ Der Aufbau der Seitenleiste besteht aus den folgenden Komponenten:
     \item nav-user (SidebarFooter)
 \end{itemize}
 
-%%% Bild einfügen von der Struktur
-
-\vspace{2cm}
-
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=1\textwidth]{files/Thomas/pics/Website/Sidebar/sidebar-aufbau.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\caption[Aufbau der Seitenleiste von SchadCN \cite{SchadCNSeitenleiste}]{Aufbau der Seitenleiste von SchadCN \cite{SchadCNSeitenleiste}}
 \label{fig:gehaeuse_internet_bild}
 \end{figure}
 
@@ -462,10 +465,12 @@ Schüler, Lehrer und Direktoren besitzen hingegen keine Berechtigung, die Schule
 \label{fig:school_switcher_open}
 \end{figure}
 
+\newpage
+
 Die ausgewählte Schule wird anschließend in einem Cookie gespeichert, um beim nächsten Aufruf der Webseite automatisch wiederhergestellt zu werden.  
 Im folgenden Codebeispiel wird das Cookie clientseitig unter dem Namen \texttt{activeSchool} gesetzt und speichert die \texttt{UUID} der Schul-ID.
 
-\begin{lstlisting}[language=TypeScript]
+\begin{lstlisting}[language=mytsx]
 Cookies.set('activeSchool', school.id, {
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
@@ -487,7 +492,7 @@ Der Parameter \texttt{path} legt fest, dass das Cookie auf der gesamten Webseite
 
 
 
-
+\newpage
 
 \subsection{nav-departments-classes-devices}
 
@@ -495,44 +500,56 @@ Der Parameter \texttt{path} legt fest, dass das Cookie auf der gesamten Webseite
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.5\textwidth]{files/Thomas/pics/Website/Sidebar/nav-departments-classes-devices/nav-screen.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\caption[Naviagtion in der Seitenleiste für Klassen und Abteilungen und Sensoren]{Naviagtion in der Seitenleiste für Klassen und Abteilungen und Sensoren}
 \label{fig:gehaeuse_internet_bild}
 \end{figure}
 
+\vspace{1cm}
 
 
-Die Aufgabe der nav-departments-classes-devices Komponente ist das Man zwischen den Abteilungen Klassen und Sensoren umher Navigiren kann. Damit erkannt wird in welcher Schule man sich Befindet wurde eine Speziele URL Addresse entworden:
+Die Aufgabe der nav-departments-classes-devices Komponente ist das Man zwischen den Abteilungen Klassen und Sensoren umher Navigiren kann. Damit erkannt wird in welcher Schule man sich Befindet wurde eine Speziele URL Addresse entworfen:
 
-\begin{lstlisting}[language=mytsx]
+\vspace{1cm}
 
-domainname/uuid-der-schule/dashboard?department=uuid-in dem-Department-man-gerae-ist&class=uuid-in-welcher-Klasse-man-sich-gerade befindet&device=device-uuid
+\begin{lstlisting}[language=myurl, breaklines=true, breakatwhitespace=false, basicstyle=\ttfamily\small, columns=flexible]
+domainname/uuid-der-schule/dashboard?department=uuid-in-dem-Department-man-gerade-ist&class=uuid-in-welcher-Klasse-man-sich-gerade-befindet&device=device-uuid
+\end{lstlisting}
 
-Beispiel
+Beispiel:
 
+\begin{lstlisting}[language=myurl, breaklines=true, breakatwhitespace=false, basicstyle=\ttfamily\small, columns=flexible]
 domainname/0d3e37cf-8350-46f2-823b-26dd90c01266/dashboard?department=e1ed2bd8-4c9c-40f8-bec7-4edcebe59fc1&class=eb4355fd-1e98-4961-be62-36fa9fc5cec0&device=a52eb8dc-5df5-475a-8a9f-f5f5a24ac2d3
 \end{lstlisting}
 
 
+
+
 %%% gehört vlt noch was hin 
+
+
+\vspace{-1.75cm}
 
 \subsection{nav-user}
 
-Die nav-user Komponente ist im SidebarFooter(Am Boden der Seitenleiste). Sie ist verantwortlich dafür das sie vom Benutzer den Benutzernamen die E-Mail Addresse den Avatar anzeigt
+Die \texttt{nav-user}-Komponente befindet sich im \texttt{SidebarFooter} (am unteren Ende der Seitenleiste).  
+Sie ist dafür verantwortlich, den Benutzernamen, die E-Mail-Adresse sowie den Avatar des aktuellen Benutzers anzuzeigen.
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.5\textwidth]{files/Thomas/pics/Website/Sidebar/nav-user/user-component.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
-\label{fig:gehaeuse_internet_bild}
+\caption[Benutzer-Komponente in der Sidebar]{Benutzer-Komponente in der Seitenleiste geschlossen}
+\label{fig:nav_user_component}
 \end{figure}
 
+Zusätzlich ermöglicht die Komponente den Zugriff auf den Profil-Editor.  
+Für Administratoren werden darüber hinaus Links zu den Administrationsseiten der Webseite angezeigt.  
+Außerdem stehen eine Einstellungsseite(\ref{ref:settings}) sowie ein Logout-Button zum Abmelden zur Verfügung.
 
-Außerdem ist es auch noch da um Auf den Profil Editor des Benutzers zu kommen. Wenn man ein Admin ist kann man auch auf die Administrator Seiten der Website kommen und es gibt noch eine Settings Seite und einen Logout Knopf um sich abzumelden. 
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.5\textwidth]{files/Thomas/pics/Website/Sidebar/nav-user/user-component-open.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\caption[Benutzer-Komponente in der Seitenleiste geöffnet]{Benutzer-Komponente in der Seitenleiste geöffnet}
 \label{fig:gehaeuse_internet_bild}
 \end{figure}
 
@@ -554,21 +571,25 @@ Beim Abmelden von der Seite wird als erstes  gewarted bis die signOut funktion e
 
 \newpage
 
-\section{Settings Seite}
+\section{Einstellungs Seite}
+\label{ref:settings}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/Settings/settings-screen.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/Settings/settings-component.png}
+\caption[Bild von der Einstellungs Seite]{Bild von der Einstellungs Seite}
 \label{fig:gehaeuse_internet_bild}
 \end{figure}
 
 
-Die Settings(Einstellungs Seite hat nur eine Aufgabe und zwar den Theme zu wechseln dieser wird dann wieder in den Cookies gespeichet mit den Namen theme um bei einen Refresh nicht den Theme zu verlieren.
+Die \texttt{Settings}-Seite (Einstellungsseite) hat ausschließlich die Aufgabe, das Theme der Webseite zu wechseln.  
+Das ausgewählte Theme wird anschließend in einem Cookie mit dem Namen \texttt{theme} gespeichert, um sicherzustellen, dass beim Aktualisieren der Seite (Refresh) das Theme erhalten bleibt.
 
-\vspace{2cm}
+\vspace{0.5cm}
 
-In diesem Code wird ein Schalter eingesetzt, um zwischen dem Dunklen Modus und dem Hellen Modus zu wechseln. Dieser Switch hat die ID \texttt{dark-mode} und eine Variable, die den Wert des Schalters annimmt. Am Schluss wird jedes Mal, wenn der Schalter betätigt wird, die Funktion \texttt{toggleTheme()} aufgerufen, um die Cookies zu setzen und das Theme der Seite zu verändern.
+Im folgenden Codebeispiel wird ein Schalter (\texttt{Switch}) eingesetzt, um zwischen dem Dark Mode und dem Light Mode zu wechseln.  
+Der Schalter besitzt die ID \texttt{dark-mode} und eine Variable, die den aktuellen Zustand (aktiviert/deaktiviert) verwaltet.  
+Jedes Mal, wenn der Schalter betätigt wird, wird die Funktion \texttt{toggleTheme()} aufgerufen, welche den Cookie aktualisiert und das Theme der Seite entsprechend anpasst.
 
 
 \begin{lstlisting}[language=mytsx]
@@ -576,20 +597,22 @@ In diesem Code wird ein Schalter eingesetzt, um zwischen dem Dunklen Modus und d
     id="dark-mode"
     checked={isDarkMode}
     onCheckedChange={toggleTheme}
-  />
+/>
 \end{lstlisting}
 
 \newpage
 
 \section{Profile Seite}
+\label{ref:profil-site}
 
-Die Profile Seite ist eigetnlich die Profile-Setup Seite um den Benutzer die Möglichkeit zu geben das Profil Bild den Vorname Nachnmaen und Bentuzernamen zu aktualisieren.
+Die Profil-Seite ist im Grunde die \texttt{Profile-Setup}-Seite \ref{ref:profile-setup} und bietet dem Benutzer die Möglichkeit, das Profilbild, den Vornamen, Nachnamen sowie den Benutzernamen zu aktualisieren.
+
 
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=1\textwidth]{files/Thomas/pics/Website/Profile/profile-screen.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\caption[Bild von der Profil Seite]{Bild von der Profil Seite}
 \label{fig:gehaeuse_internet_bild}
 \end{figure}
 
@@ -597,19 +620,19 @@ Die Profile Seite ist eigetnlich die Profile-Setup Seite um den Benutzer die Mö
 
 \section{Admin Dashboard}
 
-Das Admin Dashboard ist dafür da um alle User, Geräte, Klassen, Abteilungen und Schulen zu Erstellen oder zu Löschen. 
+Das Admin Dashboard ist dafür da um alle User, Geräte, Klassen, Abteilungen und Schulen zu Verwalten. 
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/admin/devices/devices-screen.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/admin/devices/sensors-admin-screen.png}
+\caption[Bild von der Administration Seite]{Bild von der Administration Seite}
 \label{fig:gehaeuse_internet_bild}
 \end{figure}
 
-\clearpage
-
 
 In dem Bild kann man sehen wie das Dashboard der Sensoren ausschaut.
+
+\newpage
 
 \subsection{Table}
 
@@ -618,7 +641,7 @@ Jeder Table hat außer die User Table die ist speziel hat am anfag die uuid von 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=1\textwidth]{files/Thomas/pics/Website/admin/sensors/sensor-table.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\caption[Bild von der Tabelle der Sensoren]{Bild von der Tabelle der Sensoren}
 \label{fig:gehaeuse_internet_bild}
 \end{figure}
 
@@ -648,8 +671,8 @@ Beim Erstellen von den Verschieden Strukturelementen wurde eine immer die Selbe 
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=0.8\textwidth]{files/Thomas/pics/Website/admin/sensors/sensor-create.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\includegraphics[width=0.5\textwidth]{files/Thomas/pics/Website/admin/sensors/sensor-create.png}
+\caption[Bild von der Erstell Komponente der Sensoren]{Bild von der Erstell Komponente der Sensoren}
 \label{fig:sensor-create}
 \end{figure}
 
@@ -704,23 +727,24 @@ if (inputValue.length > 2 && autocompleteService.current) {
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=0.8\textwidth]{files/Thomas/pics/Website/admin/school/school-map.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{Google Maps Karte auf der Webseite}
+\includegraphics[width=0.5\textwidth]{files/Thomas/pics/Website/admin/school/school-map.png}
+\caption[Google Maps Karte auf der Webseite]{Google Maps Karte auf der Webseite}
 \label{fig:gehaeuse_internet_bild}
 \end{figure}
 
-Die Schule Map ist eine Google Maps karte den Standort
-der Schulen anzeigen kann.
+Die \texttt{Schule-Map} ist eine Google Maps Karte, die den Standort der Schulen anzeigen kann.
 
-\vspace{1cm}
+\vspace{0.5cm}
 
-
-In diesen Komponent wurde die Map von react-google-maps/api genommen diese erlaubt für viele Eisntellungen aber sie ist auch leicht tu implementiren
+Für diese Komponente wurde die Bibliothek \texttt{react-google-maps/api} verwendet.  
+Sie bietet zahlreiche Einstellungsmöglichkeiten und ist gleichzeitig einfach zu implementieren.
 
 \vspace{0.15cm}
 
-In diesen code wird die Map Eingetsellt der Standard Ort wo die Map reingezoomed ist in St Pölten
-Außerdem wruden viele Controle Eisntellungen auf falsch gesstellt da der User nur die Map zum Zoomen benutzen soll und zu schauen wo Schulen sind.
+Im folgenden Codeabschnitt wird die Karte konfiguriert.  
+Der Standardausschnitt ist so gewählt, dass die Karte auf St. Pölten zentriert und hereingezoomt ist.  
+Zudem wurden viele Steuerungselemente (\texttt{Controls}) deaktiviert, da die Benutzer lediglich die Karte zum Zoomen und zur Standortsuche der Schulen nutzen sollen.
+
 
 
 \begin{lstlisting}[language=mytsx]
@@ -746,32 +770,49 @@ Außerdem wruden viele Controle Eisntellungen auf falsch gesstellt da der User n
 
 \section{Dashbaord}
 
-Das Dashboard ist der Kern punkt dieser Diplomarbeit den dies Zeigt an welche werte der Sensor gemessen hat.
+Das Dashboard stellt den zentralen Bestandteil dieser Diplomarbeit dar, da es die vom Sensor gemessenen Werte visuell darstellt.
+
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=1\textwidth]{files/Thomas/pics/Website/dashbord/dashbaord-screen.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{Dashbaord}
+\vspace{-1.5cm}
+\caption[Bild vom fertigen Dashbaord]{Bild vom Fertigen Dashbaord}
 \label{fig:gehaeuse_internet_bild}
 \end{figure}
 
-\subsection{DatePicke}
+\vspace{-0.75cm}
+
+\subsection{DatePicke Komponente}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/dashbord/dashbaord-datepicker.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{flowchart of datepicker}
-\label{fig:gehaeuse_internet_bild}
+\begin{minipage}[c]{0.4\textwidth}
+    \centering
+    \vspace*{\fill}
+    Für das Auswählen eines bestimmten Zeitraums, in dem die Daten betrachtet werden sollen, wurde eine \texttt{DatePicker} Komponente erstellt.  
+    Diese ermöglicht es, flexibel einen beliebigen Zeitraum für die Anzeige der Messdaten einzustellen.
+    \vspace*{\fill}
+\end{minipage}
+\hfill
+\begin{minipage}[c]{0.55\textwidth}
+    \centering
+    \raisebox{0.5cm}{ % <--- shifts the image down to center with the text
+        \includegraphics[width=0.5\textwidth]{files/Thomas/pics/Website/dashbord/dashbaord-datepicker.png}
+    }
+    \caption[Geöffneter DatePicker]{Geöffneter-DatePicker}
+    \label{fig:datepicker_geoeffnet}
+\end{minipage}
 \end{figure}
 
 
-Für das auswählen das man in einen gewissen Zeitraum die Daten auswählen kann wurde ein DatePicker Komponente erstellt die einen gewissen zeitraum einstellen kann
+
 
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=1\textwidth]{files/Thomas/pics/Website/dashbord/dashbaord-datepicker-flowchart.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{flowchart of datepicker}
+\caption[Ablaufdiagramm von DatePicker Komponente]{Ablaufdiagramm von DatePicker Komponente}
 \label{fig:gehaeuse_internet_bild}
 \end{figure}
 
@@ -783,11 +824,11 @@ Für das auswählen das man in einen gewissen Zeitraum die Daten auswählen kann
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=1\textwidth]{files/Thomas/pics/Website/dashbord/chart.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{Diagramm Dashboard}
+\caption[Diagramm Dashboard]{Diagramm Dashboard}
 \label{fig:Flowchart_Backend}
 \end{figure}
 
-Das Diagramm wrude mit den Diagrammen von Shadcn gemacht. Die Werte die angezeigt werden sollten sind.
+Das Diagramm wurde mit den Diagrammen von Shadcn gemacht. Die Werte die angezeigt werden sollten sind.
 
 \begin{itemize}
     \item Temperature
@@ -799,17 +840,11 @@ Das Diagramm wrude mit den Diagrammen von Shadcn gemacht. Die Werte die angezeig
     \item Gas Resistance
 \end{itemize}
 
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=1\textwidth]{files/Thomas/pics/Website/dashbord/dashbaord-datepicker-flowchart.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{flowchart of chart}
-\label{fig:gehaeuse_internet_bild}
-\end{figure}
-
 Da nicht jederzeit alle Werte gleichzeitig angezeigt werden sollen, wurde eine Lösung mit Schaltflächen implementiert, um einzelne Linien flexibel ein- oder auszublenden.
 Mithilfe von \texttt{zustand} wird im folgenden Code-Snippet im State gespeichert, welche Linien aktuell sichtbar sind.
 
-Zunächst wird geprüft, ob die Schaltfläche \texttt{"all"} gedrückt wurde. In diesem Fall werden entweder alle vier Linien gleichzeitig ein- oder ausgeblendet, je nachdem, ob aktuell bereits alle sichtbar sind.
+\newpage
+Zunächst wird geprüft, ob die Schaltfläche \texttt{''all''} gedrückt wurde. In diesem Fall werden entweder alle vier Linien gleichzeitig ein- oder ausgeblendet, je nachdem, ob aktuell bereits alle sichtbar sind.
 Wird hingegen eine einzelne Linie ein- oder ausgeblendet, so wird ihr Name entweder aus dem \texttt{activeLines}-Array entfernt oder wieder hinzugefügt.
 
 \begin{lstlisting}[language=mytsx]
@@ -837,7 +872,7 @@ toggleLine: (line) => {
 
 
 
-
+\newpage
 
 
 \subsection{Realtime}
@@ -870,11 +905,9 @@ export async function subscribe_to_sensor_readings(
 }
 \end{lstlisting}
 
-
 \newpage
 
-
-\subsection{Cards}
+\subsection{Cards Komponente}
 
 Auf dem Dashboard werden 4 Karten angezeit wo jede den aktulesten wert anzeigt der von dem Sensor gemessen wurde. Dies wurde auch mittels der gelichen Reatlime \ref{ref:realtime-sensor} implementiert.
 
@@ -882,14 +915,10 @@ Auf dem Dashboard werden 4 Karten angezeit wo jede den aktulesten wert anzeigt d
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=1\textwidth]{files/Thomas/pics/Website/dashbord/dashboard-card.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{flowchart of chart}
+\caption[Bild von den Cards Komponenten wie sie den letzten sensor Wert anzeigen]{Bild von den Cards Komponenten wie sie den letzten sensor Wert anzeigen}
 \label{fig:gehaeuse_internet_bild}
 \end{figure}
 
-
-
-
-\newpage
 
 Im zweiten Code-Snippet wird der Channel mithilfe von \texttt{zustand} im State gespeichert.  
 Zusätzlich wird hier festgelegt, dass der Callback nur bei einem \texttt{INSERT} oder \texttt{UPDATE} ausgelöst wird.  
@@ -926,12 +955,12 @@ subscribeToReadings: async (sensorId) => {
 
 \section{Backend}
 
-Das Backend kann auf /api/sensor-data mittels einen Post request daten geschickt werden wie in \ref{ref:backend_design} beschreiben. Wie diese Daten verarbeitet werden kann man im flowchart \ref{fig:Flowchart_Backend} sehen.
+Das Backend kann auf /api/sensor-data mittels einen Post request daten geschickt werden wie in \ref{ref:backend_design} beschreiben. Wie diese Daten verarbeitet werden kann man im Ablaufdiagramm \ref{fig:Flowchart_Backend} sehen.
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=1\textwidth]{files/Thomas/pics/Website/backend/image.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{Flowchart vom Backend}
+\caption[Ablaufdiagramm vom Backend]{Ablaufdiagramm vom Backend}
 \label{fig:Flowchart_Backend}
 \end{figure}
 

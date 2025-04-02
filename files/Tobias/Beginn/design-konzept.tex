@@ -1,4 +1,5 @@
 \begin{inhalt}
+\chapter{Design \& Konzept}
 \renewcommand*\chapterpagestyle{scrheadings}
 
 \section{Parameter}
@@ -29,15 +30,23 @@ Luftschadstoffe werden kurz als VOC bezeichnet. Die Abkürzung VOC (Volatile Org
 
 Da in dieser Diplomarbeit darauf geachtet wurde, hauptsächlich Komponenten mit europäischer Herkunft zu verwenden, fiel die Wahl des Mikrocontrollers auf den Pico W der Raspberry Pi Foundation. Dieser basiert auf dem RP2040-Mikrocontroller und unterstützt MicroPython sowie C/C++. Der Raspberry Pi Pico W ist mit einem WLAN-Modul ausgestattet und besitzt Interfaces für SPI und I2C, welche für diese Diplomarbeit benötigt werden. \cite{Raspberry_Pi_Pico_W}
 
-\subsection{Sensoren}
+\subsection{Sensoren} \label{sec:Sensoren-design}
 
 \textbf{CO$_2$-Sensor:}
 
 \smallskip
 
-Der PASCO2V01 ist ein CO$_2$-Sensor der Marke Infineon (Österreich). Der Sensor misst den CO$_2$-Anteil in der Luft in PPM (Parts Per Million). Er benötigt 3,3V sowie 12V als Spannungsversorgungen und kann unter anderem mit I2C angesteuert und ausgelesen werden. \cite{PASCO2V01}
+Der PASCO2V01 ist ein CO$_2$-Sensor der Marke Infineon Technologies (Österreich). Der Sensor misst den CO$_2$-Anteil in der Luft in PPM (Parts Per Million). Er benötigt 3,3V sowie 12V als Spannungsversorgungen und kann unter anderem mit I2C angesteuert und ausgelesen werden. \cite{PASCO2V01}
 
-Benutzt wird das Mini Evaluation Board für den XENSIV™ PAS CO2-Sensor \cite{PASCO2_Miniboard}, da es bereits integrierte Pins besitzt und deshalb kein feines SMD-Löten erforderlich ist. 
+Benutzt wird das Mini Evaluation Board für den XENSIV PAS CO2-Sensor \cite{PASCO2_Miniboard}, da es bereits integrierte Pins besitzt und deshalb kein feines SMD-Löten erforderlich ist. 
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.2\textwidth]{files/Tobias/pics/Logos/Infineon-Logo.svg.png}
+\caption{Infineon Technologies-Firmenlogo \cite{Infineon Logo}}
+\label{fig:Infineon Technologies-Firmenlogo}
+\end{figure}
+
 \bigskip \\
 
 \textbf{Gas-Sensor:}
@@ -47,7 +56,7 @@ Benutzt wird das Mini Evaluation Board für den XENSIV™ PAS CO2-Sensor \cite{P
 Der BME688 ist ein Luftqualitätssensor der Marke Bosch (Deutschland) \cite{BME688}. Er wird mittels I2C angesteuert bzw. ausgelesen. Der BME688 misst Temperatur in °C, relative Luftfeuchtigkeit in Prozent, Luftdruck in hPa und Gaswiderstand in Ohm. Der Gassensor des BME688 wurde laut Datenblatt auf folgende Gase charakterisiert:
 
 \begin{itemize}
-    \item Wasserstoffsulfid (H₂S) 
+    \item Wasserstoffsulfid (H$_2$S) 
     \item Ethanol (EtOH) 
     \item Kohlenmonoxid (CO)
     \item flüchtige organische Verbindungen (VOCs)
@@ -57,6 +66,13 @@ Der Gassensor misst keine einzelnen Gaskonzentrationen, sondern ermittelt einen 
 \smallskip
 
 Benutzt wird der Environment 3 Click der Marke MIKROE (Serbien) \cite{ENVIRONMENT_3_CLICK}. Dieser basiert auf dem BME688 von Bosch und besitzt integrierte Pins sowie Auswahlmöglichkeiten für die Adresse und das Bussystem (Kap. \ref{sec:Pin_Zuordnungen}), direkt am Board.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.3\textwidth]{files/Tobias/pics/Logos/Bosch-logotype.svg.png}
+\caption{Bosch-Firmenlogo \cite{Bosch Logo}}
+\label{fig:Bosch-Firmenlogo}
+\end{figure}
 
 \subsection{Display}
 
@@ -82,8 +98,8 @@ Als Designidee für das Display-Layout wurden Skizzen mit Excalidraw \cite{Excal
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=0.35\textwidth]{files/Tobias/pics/Skizzen/Screen1_Sensor_Info.png}
-\caption[Display Interface Skizze (Seite 1)]{}
+\includegraphics[width=0.3\textwidth]{files/Tobias/pics/Skizzen/Screen1_Sensor_Info.png}
+\caption[Display Interface Skizze (Seite 1)]{Display Interface Skizze (Seite 1)}
 \label{fig:display_skizze_seite_1}
 \end{figure}
 
@@ -95,8 +111,8 @@ Am oberen Rand befindet sich die Seitenbezeichnung („CO2-Sensor“) sowie die 
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=0.35\textwidth]{files/Tobias/pics/Skizzen/Screen2_Info.png}
-\caption[Display Interface Skizze (Seite 2)]{}
+\includegraphics[width=0.3\textwidth]{files/Tobias/pics/Skizzen/Screen2_Info.png}
+\caption[Display Interface Skizze (Seite 2)]{Display Interface Skizze (Seite 2)}
 \label{fig:display_skizze_seite_2}
 \end{figure}
 
@@ -111,14 +127,16 @@ Diese Seite der Benutzeroberfläche stellt Informationen über das Gerät bereit
 
 Am unteren Ende der Seite befinden sich zwei Felder mit dem aktuellen Datum und der Helligkeitsstufe des Displays in Prozent.
 
+\clearpage
+
 \begin{center}
     \textbf{Seite 3:}
 \end{center}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=0.35\textwidth]{files/Tobias/pics/Skizzen/Screen3_Settings.png}
-\caption[Display Interface Skizze (Seite 3)]{}
+\includegraphics[width=0.3\textwidth]{files/Tobias/pics/Skizzen/Screen3_Settings.png}
+\caption[Display Interface Skizze (Seite 3)]{Display Interface Skizze (Seite 3)}
 \label{fig:display_skizze_seite_3}
 \end{figure}
 
@@ -130,7 +148,8 @@ Die dritte Seite zeigt die Konfiguration des Geräts. Der Aufbau ähnelt den and
     \item Helligkeit
 \end{itemize}
 
-Zusätzliche Markierungen („???“) deuten an, dass noch weitere Einstellungsoptionen ergänzt werden können.
+\clearpage
+
 
 \begin{center}
     \textbf{Showroom:}
@@ -138,8 +157,8 @@ Zusätzliche Markierungen („???“) deuten an, dass noch weitere Einstellungso
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=0.35\textwidth]{files/Tobias/pics/Skizzen/Showroom1.png}
-\caption[Display Interface Skizze (Showroom)]{}
+\includegraphics[width=0.3\textwidth]{files/Tobias/pics/Skizzen/Showroom1.png}
+\caption[Display Interface Skizze (Showroom)]{Display Interface Skizze (Showroom)}
 \label{fig:display_skizze_showroom1}
 \end{figure}
 

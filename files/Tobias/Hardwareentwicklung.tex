@@ -46,7 +46,7 @@ I = 0{,}048 \cdot (10)^{0{,}44} \cdot (38{,}02)^{0{,}725} \approx 1{,}85\,\text{
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.90\textwidth]{files/Tobias/pics/Pinout/pico2w-pinout.pdf}
-\caption[Raspberry Pico W - Pinout]{Raspberry Pico W - Pinout}
+\caption[Raspberry Pico W - Pinout]{Raspberry Pico W - Pinout \cite{PicoW Pinout}}
 \label{fig:PicoW_Pinout}
 \end{figure}
 
@@ -93,14 +93,14 @@ GPIO11 & DIN (MOSI) \\
 
 In Tabelle \ref{tab:GPIO_Zuordnung} sind GPIO0 und GPIO1 dem Auslesen der Taster S1 und S2 (Kap. \ref{sec:Benutzer_Interaktionen}) zugewiesen. GPIO4 und GPIO5 sind den I2C-Kommunikationsleitungen zugeordnet; auf diesen Pins liegt das „Default-I2C“ des Raspberry Pi Pico W (Abb. \ref{fig:PicoW_Pinout}). GPIO7 bis GPIO11 dienen zur Ansteuerung des Displays mit SPI (Abb. \ref{fig:Display_Pinout}).
 
-\bigskip \\
+\clearpage
 
 \textbf{Display - Pinout:}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.7\textwidth]{files/Tobias/pics/Pinout/2inch-LCD-Module-4_960.jpg}
-\caption[Display - Pinout]{Display - Pinout}
+\caption[Display - Pinout]{2inch LCD Module - Pinout}
 \label{fig:Display_Pinout}
 \end{figure}
 
@@ -133,14 +133,14 @@ BL & Hintergrundbeleuchtung \\
 \label{tab:display_pins}
 \end{table}
 
-\bigskip \\
+
 
 \textbf{PASCO2 - Pinout:}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=0.6\textwidth]{files/Tobias/pics/Pinout/minieval_co2_pinout.pdf}
-\caption[Display - Pinout]{Display - Pinout}
+\includegraphics[width=0.5\textwidth]{files/Tobias/pics/Pinout/minieval_co2_pinout.pdf}
+\caption[Display - Pinout]{PAS CO2 Mini Evaluation Board - Pinout}
 \label{fig:PASCO2_Pinout}
 \end{figure}
 
@@ -148,12 +148,12 @@ Mithilfe des PSEL-Pins wird dem Sensor mitgeteilt, welche Kommunikationsschnitts
 
 \bigskip \\
 
-\textbf{BME688 - Pinout:}
+\textbf{Environment 3 Click - Pinout:}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.5\textwidth]{files/Tobias/pics/Pinout/environment-3-click-thickbox_default-2.jpg}
-\caption[Display - Pinout]{Display - Pinout}
+\caption[Display - Pinout]{Environment 3 Click - Pinout}
 \label{fig:BME688_Pinout}
 \end{figure}
 
@@ -333,7 +333,7 @@ Die Beschaltung des TLV61046ADBVR (Abb. \ref{fig:12V Spannungswandler Schematik}
 Da das Display im Gehäuse befestigt wird und sich nicht direkt auf der Platine befindet, wurde ein JST XH 2.54mm-Stecker (Female) für dessen Verbindung benutzt. Als Taster wurden 2-1825027-0 Taster verwendet. Diese sind geknickt und haben eine Knopflänge von 9,24mm. Dadurch lassen sich die Taster gut in das Gehäuse integrieren. Für die Befestigung im Gehäuse wurden auf der Platine 2 Löcher für M3-Schrauben vorgesehen. Ein drittes Loch direkt unter dem Mikrocontroller dient nur als Platzhalter.
 
   
-\section{PCB Version 2}
+\section{PCB Version 2} \label{sec:PCBVersion2}
 
 
    \begin{figure}[H] 

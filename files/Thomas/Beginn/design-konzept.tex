@@ -1,16 +1,22 @@
 \begin{inhalt}
-\chapter{Design \& Konzept}
 \renewcommand*\chapterpagestyle{scrheadings}
 
 \section{Website}
 
-Für Das Bauen einer Website muss sich zuerst gefragt werden mit was man eigentlich eine Website baut. Dafür gibt es die Verschiedenste Möglichkeiten. In disen Fall wurde NextJS genommen da es eines der Meist benutzen Frameworks \cite{SurveyStackOverflow} für Javascript ist.
+Für das Bauen einer Website muss sich zuerst gefragt werden mit was man eigentlich eine Website baut. Dafür gibt es die verschiedene Möglichkeiten. In diesem Fall wurde NextJS genommen da es eines der meistgenutzten Frameworks \cite{SurveyStackOverflow} für JavaScript ist.
 
 \vspace{1cm}
 
 \textbf{Frontend}
 
 Der Großteil des Frontends wird zunächst in Obsidian mithilfe des Excalidraw-Plugins entworfen, um zu veranschaulichen, wie eine Seite aussehen könnte.
+
+\begin{figure}[!htb] 
+\centering 
+\includegraphics[width=1\textwidth]{files/Thomas/pics/Design-Grundlagen/image.png} 
+\caption[Obsidan mit dem Excalidraw-Plugin geöffnet]{Obsidan mit dem Excalidraw-Plugin geöffnet} 
+\label{fig:gehaeuse_internet_bild} 
+\end{figure}
 
 \newpage
 \subsection{Dashboard}
@@ -19,15 +25,17 @@ Im Rahmen dieser Diplomarbeit wurde das Dashboard unter Berücksichtigung modern
 
 \begin{figure}[!htb] 
 \centering 
-\includegraphics[width=0.75\textwidth]{files/Thomas/pics/Design-Grundlagen/Frontend/Dashboard/dashboard.png} 
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{Shadcn Beispiel Dashboard} 
+\includegraphics[width=0.85\textwidth]{files/Thomas/pics/Design-Grundlagen/Frontend/Dashboard/dashboard.png} 
+\caption[Shadcn Beispiel Dashboard]{Shadcn Beispiel Dashboard} 
 \label{fig:gehaeuse_internet_bild} 
 \end{figure}
 
+\vspace{-0.5cm}
+
 \begin{figure}[!htb] 
 \centering 
-\includegraphics[width=0.7\textwidth]{files/Thomas/pics/Design-Grundlagen/Frontend/Dashboard/Dashboard-Draw.png} 
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{Umdesignte Dashboard} 
+\includegraphics[width=0.85\textwidth]{files/Thomas/pics/Design-Grundlagen/Frontend/Dashboard/Dashboard-Draw.png} 
+\caption[Umdesignte Dashboard]{Umdesignte Dashboard} 
 \label{fig:gehaeuse_internet_bild} 
 \end{figure}
 
@@ -38,11 +46,13 @@ Im Rahmen dieser Diplomarbeit wurde das Dashboard unter Berücksichtigung modern
 
 Für die Entwicklung der Administrationsseiten wurde ein Konzept erarbeitet, das eine strukturierte und benutzerfreundliche Verwaltung der unterschiedlichen Datensätze ermöglicht. Auf der linken Seite wird eine Tabelle angezeigt, in der alle relevanten Einträge übersichtlich dargestellt werden. Auf der rechten Seite befindet sich eine Komponente zur Erstellung neuer Datensätze, welche die jeweiligen Tabellen ergänzt. Das System umfasst dabei separate Tabellen für Schulen, Abteilungen, Klassen, Sensoren und Benutzer, um eine differenzierte und effiziente Datenverwaltung zu gewährleisten. Zusätzlich erfolgt auf der Schul-Administrationsseite eine Visualisierung der Schulstandorte mittels einer Kartenansicht, um die räumliche Verteilung der Schulen anschaulich darzustellen.
 
+\vspace{1cm}
+
 
 \begin{figure}[!htb] 
 \centering 
 \includegraphics[width=1\textwidth]{files/Thomas/pics/Design-Grundlagen/Frontend/AdminSeite/AdminSeite-Draw.png} 
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{Beispiel einer Admin-Tabelle} 
+\caption[Beispiel einer Admin-Seite]{Beispiel einer Admin-Seite} 
 \label{fig:gehaeuse_internet_bild} 
 \end{figure}
 
@@ -56,14 +66,15 @@ Die Seitenleiste \cite{ShadCNSidebar} wurde aufgrund ihrer optimalen Form ausgew
 %\begin{figure}[H]
 %\centering
 %\includegraphics[width=0.3\textwidth]{files/Thomas/pics/Design-Grundlagen/Frontend/Sidebar/sidebar.png}
-%\caption[Bildbezeichnung für Abbildungsverzeichnis]{Beispiel einer Admin-Tabelle}
+%\caption[Beispiel einer Admin-Tabelle}
+%\label{fig:gehaeuse_internet_bild]{Beispiel einer Admin-Tabelle}
 %\label{fig:gehaeuse_internet_bild}
 %\end{figure}
 
 \begin{figure}[!htb] 
 \centering 
 \includegraphics[width=0.75\textwidth]{files/Thomas/pics/Design-Grundlagen/Frontend/Sidebar/sidebar-adminvsnotadmin.png} 
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{Seitenleiste Design Vergleich} 
+\caption[Seitenleiste Design Vergleich]{Seitenleiste Design Vergleich} 
 \label{fig:gehaeuse_internet_bild} 
 \end{figure}
 
@@ -73,7 +84,7 @@ Wird ein Sensor ausgewählt, gelangt der Benutzer auf das zugehörige Dashboard,
 \begin{figure}[!htb] 
 \centering 
 \includegraphics[width=0.7\textwidth]{files/Thomas/pics/Design-Grundlagen/Frontend/Sidebar/sidebar-nav-user-adminvsnotadmin.png} 
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{Benutzer Navigations Vergleich} 
+\caption[Benutzer Navigations Vergleich]{Benutzer Navigations Vergleich} 
 \label{fig:gehaeuse_internet_bild} 
 \end{figure}
 
@@ -111,7 +122,7 @@ Wird ein Sensor ausgewählt, gelangt der Benutzer auf das zugehörige Dashboard,
 
 
 
-\subsection{Backend}
+\subsection{Backend} \label{sec:Backend-Design}
 \label{ref:backend_design}
 
 Im Folgenden wird das Design des Backends erläutert. Das System ist in der Lage, verschiedene Messwerte zu verarbeiten, darunter CO\textsubscript{2}-Konzentrationen, Feuchtigkeitswerte, Temperaturwerte, Gaswiderstandswerte sowie einen Zeitstempel. Diese Daten werden im JSON-Format vom Backend empfangen. Zur Sicherstellung einer einheitlichen Datenstruktur wurde das folgende JSON-Schema definiert:
@@ -271,7 +282,7 @@ Diese Methode bietet den Vorteil, dass das Gehäuse nicht nur robust zusammengeb
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.75\textwidth]{files/Thomas/pics/new/Temu-removebg-preview.png}
-\caption[Bildbezeichnung für Abbildungsverzeichnis]{}
+\caption[Gehäuse mit optimiertem Airflow, aus der Internetrecherche \cite{TemuGehaeuse}]{Gehäuse mit optimiertem Airflow, aus der Internetrecherche \cite{TemuGehaeuse}}
 \label{fig:gehaeuse_internet_bild}
 \end{figure}
 

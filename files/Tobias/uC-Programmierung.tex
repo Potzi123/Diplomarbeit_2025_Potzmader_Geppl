@@ -1,7 +1,7 @@
 \begin{inhalt}
 \renewcommand*\chapterpagestyle{scrheadings}
 
-\chapter{Mikrocontroller-Programmierung}
+\chapter{Mikrocontroller-Programmierung} \label{sec:Mikrocontroller-Programmierung}
 
 Die Programmierung des Raspberry Pi Pico W erfolgte mithilfe der Entwicklungsumgebung Visual Studio Code (Kap. \ref{sec:VS-Code}) in Kombination mit der Raspberry Pi Pico-Erweiterung (Kap. \ref{sec:PicoExtension}). Als Programmiersprache wurde C/C++ verwendet. Die Projektstruktur basierte auf dem CMake-Buildsystem mit der Verwendung des offiziellen Pico SDK (\ref{…}). 
 
@@ -81,7 +81,7 @@ int i2c_read_blocking(i2c_inst_t *i2c, uint8_t addr, uint8_t *dst, size_t len, b
 \hline
 \texttt{len} & Anzahl der zu lesenden Bytes \\
 \hline
-\texttt{nostop} & Meist \texttt{false}, es sei denn, ein \texttt{REPEATED START} ist erforderlich \\
+\texttt{nostop} & Stop / Repeated Start \\
 \hline
 \end{tabular}
 \caption{I2C-Lese-Funktion Parameterübersicht}
@@ -93,24 +93,29 @@ Beim Lesen muss zuerst das entsprechende Register geschrieben werden, um anschli
 \bigskip \\
 Die Lese- und Schreibfunktionen werden vom Pico SDK bereitgestellt.
 
+\bigskip \\
+
 \textbf{I2C-Beispiel:}
 
-Als Beispiel wurde vom Host die Daten 0xAA an den Slave mit der Adresse 0x28 gesendet. 
+Als Beispiel wurden die Daten 0xAA an den Slave mit der Adresse 0x28 gesendet. 
 
 \begin{lstlisting} [style=mytsx][caption={I2C Initialisierung}, label={code:i2c_init}]
 test_buffer[0] = 0xAA;
 i2c_write_blocking(i2c, 0x28, test_buffer, 1, false);
 \end{lstlisting}
-\index{Code Snippet 1@\hyperref[code:snippet1]{Snippet 1}}
+%%\index{Code Snippet 1@\hyperref[code:snippet1]{Snippet 1}}
+
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=0.75\textwidth]{files/Tobias/pics/Schaltungen/Schematik/3V3_Converter_Schematik.PNG}
-\caption[3,3V Spannungsregler Schematik]{3,3V Spannungsregler Schematik}
-\label{fig:3,3V Spannungsregler Schematik}
+\includegraphics[width=0.65\textwidth]{files/Tobias/pics/Messungen/I2C-Test.png}
+\caption[I2C-Test Oszilloskop]{I2C-Test Oszilloskop}
+\label{fig:I2C Test - Oszilloskop}
 \end{figure}
 
+\bigskip \\
 
+\newpage
 
 \section{PAS CO2}
 
@@ -362,7 +367,7 @@ Hier wird ein Container (Feld) auf einem Screen erstellt und mit einem Label bes
 
 In LVGL werden Buttons mit \texttt{lv\_btn\_create()} erstellt und können anschließend mit Texten (\texttt{lv\_label\_create()}) oder Symbolen versehen werden. Durch Event-Handler lassen sich Funktionen hinterlegen, die auf einen Button-Klick reagieren.
 
-\begin{lstlisting}[style=mytsx][language=C, caption={Erstellen eines Buttons mit Label}]
+\begin{lstlisting}[language=C, caption={Erstellen eines Buttons mit Label}]
 lv_obj_t* btn = lv_btn_create(screen);
 lv_obj_center(btn); // Zentriert den Button
 
@@ -374,11 +379,15 @@ Hier wird ein Button mit einem einfachen Text erstellt und mittig auf dem aktuel
 
 \section{Wifi}
 
-Für die Verbindung mit dem WLAN, wird eine Bibliothek von Benedikt Walter eingebunden. Diese ist genau auf den Raspberry Pico W zugeschnitten. 
+Für die Verbindung mit dem WLAN, wird eine Bibliothek von Benedikt Walter eingebunden. Diese ist genau auf den Raspberry Pico W zugeschnitten \cite{Erasmus-Code-Github}. 
 
 \section{HTTPS}
 
-\section{Benutzer Interaktion:}
+Die gemessenen Daten werden mit HTTPS (\ref{sec:HTTPS-Grundlagen}) vom Mikrocontroller an den Webserver gesendet. Am Mikrocontroller wird dabei eine Bibliothek von Benedikt Walter verwendet \cite{Erasmus-Code-Github}. Im Programmcode wird der Webserver, der die Daten empfangen soll, verlinkt sowie das Übertragungsformat in JSON definiert (\ref{sec:Backend-Design}).
+
+
+
+\section{Benutzer Interaktion:} \label{sec:BeutzerInteraktionen}
 
 Der Benutzer kann durch die zwei Taster mit dem Display-Interface interagieren. Die Taster haben dabei folgende Funktionen:
 
@@ -403,11 +412,11 @@ Short Press: Button wählen (auf Screen 3) \\
 \end{table}
 
 
-Der Ablauf der Tasterabfrage in der Dauerschleife des Programmcodes, wird durch folgendes Ablaufdiagramm beschrieben: (KEY0 = Taster1; KEY1 = Taster 2)
+Der Ablauf der Tasterabfrage in der Dauerschleife des Programmcodes, wird durch folgendes Ablaufdiagramm beschrieben: (KEY0 = Taster 1; KEY1 = Taster 2)
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.75\textwidth]{files/Tobias/pics/Diagramme/Tasterabfrage1.png}
+\includegraphics[width=0.75\textwidth]{files/Tobias/pics/Diagramme/Tasterabfrage_FInal.png}
 \caption[Tasterabfrage-Ablaufdiagramm]{Tasterabfrage-Ablaufdiagramm}
 \label{fig:Tasterabfrage-Ablaufdiagramm}
 \end{figure}
@@ -444,7 +453,79 @@ Nach Verarbeitung aller Eingaben kehrt das Programm an den Anfang der Schleife z
 
 
 
+\section{Testen der Sensoren}
+
+Die Sensoren und sowie der dazugehörige Programmcode wurden auf Funktion getestet. Dabei wurden die in Kapitel \ref{sec:Mikrocontroller-Programmierung} genannten Bibliotheken verwendet. 
 
 
+Die Messdaten der Sensoren konnten erfolgreich ausgelesen werden und um diese zu veranschaulichen wurde die Serial Plotter Erweiterung in Visual Studio Code verwendet. Diese stellt empfangene Daten der Seriellen Schnittstelle graphisch dar. 
+
+Die Messung wurde in einem Raum durchgeführt, in dem sich eine Person befand. Nach 300 Sekunden wurde ein Fenster geöffnet. Die X-Achse der folgenden Graphen stellt die Zeit in Sekunden dar und die Y-Achse den gemessen Wert in der entsprechenden Einheit (\ref{sec:Sensoren-design}). 
+
+\bigskip \\
+
+\textbf{Temperatur-Messung}:
+
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Tobias/pics/Messungen/temperatur.PNG}
+\caption[Temperatur-Messung]{Temperatur-Messung}
+\label{fig:Temperatur-Messung}
+\end{figure}
+
+In Abbildung \ref{fig:Temperatur-Messung} ist zu erkennen, dass die Temperatur anfangs leicht steigt. Ab 300 Sekunden beginnt die Temperatur zu fallen. 
+
+\bigskip \\
+
+\textbf{CO$_2$-Messung:}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Tobias/pics/Messungen/co2.PNG}
+\caption[CO$_2$-Messung]{CO$_2$-Messung}
+\label{fig:CO$_2$-Messung}
+\end{figure}
+
+Zu Beginn ist in Abbildung \ref{fig:CO$_2$-Messung} ein CO$_2$-Wert von rund 1200ppm zu erkennen. Dieser steigt stetig an, bis er ab ca. 300 Sekunden zu fallen beginnt. Bei 1008 Sekunden befindet sich der Wert bei rund 570ppm. 
+
+
+Um die gemessene CO$_2$ Konzentration besser einschätzen zu können, wurde folgende Tabelle aus dem Internet entnommen: 
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.55\textwidth]{files/Tobias/pics/Tabellen/PPM-table.png}
+\caption[CO$_2$ Konzentration-Vergleichstabelle]{CO$_2$ Konzentration-Vergleichstabelle}
+\label{fig:CO$_2$-Messung}
+\end{figure}
+
+
+
+\bigskip \\
+
+\newpage
+
+\textbf{Luftfeuchtigkeits-Messung:}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Tobias/pics/Messungen/luftfeuchtigkeit.PNG}
+\caption[Luftfeuchtigkeits-Messung]{Luftfeuchtigkeits-Messung}
+\label{fig:Luftfeuchtigkeit-Messung}
+\end{figure}
+
+In Abbildung \ref{fig:Luftfeuchtigkeit-Messung} ist die relative Luftfeuchtigkeit in Prozent zu sehen. Diese beginnt ab ca. 300 Sekunden von rund 40 Prozent auf rund 34 Prozent zu fallen. 
+
+\bigskip \\
+
+\textbf{Gaswiderstands-Messung:}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1\textwidth]{files/Tobias/pics/Messungen/gas.PNG}
+\caption[Gaswiderstands-Messung:]{Gaswiderstands-Messung:}
+\label{fig:Gaswiderstand-Messung}
+\end{figure}
+
+In Abbildung \ref{fig:Gaswiderstand-Messung} ist der gemessene Gaswiderstand in Ohm zu erkennen. Dieser beginnt nach dem öffnen des Fensters zu steigen. Saubere Luft entspricht einem höheren Gaswiderstand \cite{BME}
 
 \end{inhalt}

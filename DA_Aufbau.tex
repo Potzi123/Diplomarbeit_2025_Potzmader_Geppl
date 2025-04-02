@@ -195,6 +195,12 @@
   columns=fullflexible
 }
 
+\lstdefinelanguage{myurl}{
+    morestring=[b]",
+    morecomment=[l]{//},
+    morekeywords={domainname, dashboard, department, class, device}
+}
+
 
 \lstdefinestyle{myconsole}{
   language=bash,                      % Syntax highlighting for bash
@@ -248,6 +254,8 @@
   {ä}{{\"a}}1
   {ö}{{\"o}}1
 }
+
+\usepackage{longtable}
 
 %% TIKZ Flowcharts
 \usepackage{tikz}
@@ -306,7 +314,7 @@
 %%======================================================%%
 
 %% dokumentation (deutsch/englisch) ====================%%
-\includepdf[pages=1-4]{doc/pdfs/E_DiplArbeit_Seite_4_5.pdf}                 %Dokumentation(PDF) einfügen
+\includepdf[pages=1-4]{doc/pdfs/E_DiplArbeit_Seite_4_5_new.pdf}                 %Dokumentation(PDF) einfügen
 %%\includepdf[pages=-]{doc/pdfs/dokumentation-en.pdf}                 %Dokumentation(PDF) einfügen
 %%======================================================%%
 
@@ -337,7 +345,7 @@
 %%\cleardoublepage                                              %Seite freilassen
 
 %% HAUPTTEIL ===========================================%%
-\responsible{Name 1, Name 2}
+\responsible{Thomas Potzmader, Tobias Geppl} 
 \mainmatter
 
 %Chapter 1 - Einführung/Einleitung
@@ -346,17 +354,17 @@
 
 %Chapter 2 - (Grundlagen & Methoden)
 \responsible{Thomas Potzmader, Tobias Geppl} 
-\include{files/Thomas/Beginn/grundlagen}   
-\include{files/Tobias/Beginn/grundlagen}  %Grundlagen(LaTeX File) einfügen
+
+\include{files/Tobias/Beginn/grundlagen}  
+\include{files/Thomas/Beginn/grundlagen} 
+%Grundlagen(LaTeX File) einfügen
 
 %Chapter 3 - (Design & Konzept)
 \responsible{Thomas Potzmader, Tobias Geppl} 
-\include{files/Thomas/Beginn/design-konzept}   
-\include{files/Tobias/Beginn/design-konzept}  %Methoden(LaTeX File) einfügen
 
-%Chapter 4 Ergebnisse
-\responsible{Thomas Potzmader, Tobias Geppl} 
-\include{files/Beginn/4_ergebnisse}                                      %Ergebnisse(LaTeX File) einfügen
+\include{files/Tobias/Beginn/design-konzept} 
+\include{files/Thomas/Beginn/design-konzept}   
+%Methoden(LaTeX File) einfügen
 
 
 %Chapter 5 Hardwareentwicklung
@@ -381,9 +389,16 @@
 
 
 %%ANHANG
+\include{files/Anhang/ergebnis-ausblick}  
 %===================================
 \appendix
 \responsible{Thomas Potzmader, Tobias Geppl} 
+
+%=============================%%
+%Chapter 4 Ergebnisse
+                                    %Ergebnisse(LaTeX File) einfügen
+
+%=============================%%
 
 %%Literaturverzeichnis
 %=============================%%
@@ -404,10 +419,8 @@
 %%Zeitnachweise
 %===============================%%
 %
-\include{files/zeitnachweise}                                   %Zeitnachweise(LaTeX File) einfügen
+\include{files/Anhang/Zeitnachweise}                                   %Zeitnachweise(LaTeX File) einfügen
 
-%%USB Verzeichnis
-\include{files/USBVerzeichnis.tex}
 
 %%Betreuungsprotokolle
 %==========================================
